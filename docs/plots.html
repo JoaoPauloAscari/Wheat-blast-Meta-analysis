@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>plots.utf8</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Wheat Blast Meta-analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa fa fa-home"></span>
+     
+    About
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa fa fa-table"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa fa fa-file-code-o"></span>
+     
+    Documented analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="wb-index.html">WB index</a>
+    </li>
+    <li>
+      <a href="yield.html">Wheat grain yield</a>
+    </li>
+    <li>
+      <a href="Simulations_WB.html">Economic Analysis</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="plots.html">
+    <span class="fas fa-bar-chart"></span>
+     
+    Plots
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gsheet)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wb_expl_plot <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/wheat_blast_data.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter data for means observations of each variable</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>wb_expl_plot <span class="ot">=</span> wb_expl_plot <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(study, year, location, state, region, brand_name, active_ingredient, mean_sev, mean_inc, mean_yld, mean_index, sev_check, inc_check, index_check, yld_check) </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>wb_expl_plot</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["study"],"name":[1],"type":["int"],"align":["right"]},{"label":["year"],"name":[2],"type":["int"],"align":["right"]},{"label":["location"],"name":[3],"type":["chr"],"align":["left"]},{"label":["state"],"name":[4],"type":["chr"],"align":["left"]},{"label":["region"],"name":[5],"type":["chr"],"align":["left"]},{"label":["brand_name"],"name":[6],"type":["chr"],"align":["left"]},{"label":["active_ingredient"],"name":[7],"type":["chr"],"align":["left"]},{"label":["mean_sev"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["mean_inc"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["mean_yld"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["mean_index"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["sev_check"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["inc_check"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["index_check"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["yld_check"],"name":[15],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"Abacus","7":"PYRA+EPOX","8":"69.02500","9":"85.90000","10":"1142.0000","11":"59.30595000","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"66.20000","9":"87.00000","10":"1100.0000","11":"57.60522500","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"check","7":"AACHECK","8":"73.57500","9":"93.30000","10":"1097.0000","11":"68.65327500","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"Fox","7":"TFLX+PROT","8":"68.55000","9":"84.40000","10":"1242.0000","11":"57.72537500","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"62.60000","9":"77.07500","10":"1450.0000","11":"48.27962500","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"NTX 3900","7":"AZOX+TEBU","8":"46.87500","9":"60.50000","10":"1580.0000","11":"28.37937500","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"Opera","7":"PYRA+EPOX","8":"55.77500","9":"74.17500","10":"1488.0000","11":"41.40890000","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"1","2":"2012","3":"Dourados","4":"MS","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"53.10000","9":"67.80000","10":"1528.0000","11":"35.99867500","12":"73.5750","13":"93.3000","14":"68.65327500","15":"1097.0000"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"Abacus","7":"PYRA+EPOX","8":"17.00500","9":"32.50000","10":"1521.4600","11":"4.84790000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"13.99000","9":"43.00000","10":"1483.9600","11":"5.99535000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"28.64000","9":"40.50000","10":"1219.3750","11":"11.72585000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"10.66750","9":"55.50000","10":"1731.4575","11":"5.86337500","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"17.94500","9":"40.25000","10":"1540.0825","11":"7.56465000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"NTX 3900","7":"AZOX+TEBU","8":"10.46750","9":"50.50000","10":"1627.0825","11":"5.70605000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"16.12250","9":"32.50000","10":"1585.6250","11":"5.27930000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"2","2":"2012","3":"Palotina","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"18.06000","9":"41.50000","10":"1570.8350","11":"7.88370000","12":"28.6400","13":"40.5000","14":"11.72585000","15":"1219.3750"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"Abacus","7":"PYRA+EPOX","8":"76.42500","9":"92.50000","10":"722.2175","11":"70.98662500","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"59.10000","9":"81.50000","10":"1007.2100","11":"48.70987500","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"92.86250","9":"100.00000","10":"495.1225","11":"92.86250000","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"60.02500","9":"89.00000","10":"885.4000","11":"53.38250000","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"52.98750","9":"70.50000","10":"933.9900","11":"38.30375000","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"NTX 3900","7":"AZOX+TEBU","8":"58.08750","9":"81.25000","10":"963.3300","11":"47.72825000","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"74.90000","9":"89.75000","10":"742.4200","11":"67.56237500","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"3","2":"2012","3":"Londrina","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"57.23750","9":"78.25000","10":"1022.3100","11":"44.87712500","12":"92.8625","13":"100.0000","14":"92.86250000","15":"495.1225"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"Abacus","7":"PYRA+EPOX","8":"NA","9":"NA","10":"NA","11":"NA","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"7.17500","9":"17.75000","10":"2190.8125","11":"1.72825000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"16.05000","9":"35.50000","10":"1747.4375","11":"6.36450000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"12.72500","9":"25.75000","10":"2007.9375","11":"3.43875000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"9.50000","9":"18.50000","10":"2279.3750","11":"2.07750000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"NTX 3900","7":"AZOX+TEBU","8":"10.57500","9":"24.25000","10":"1956.0625","11":"3.12175000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"Opera","7":"PYRA+EPOX","8":"14.90000","9":"32.75000","10":"1885.8750","11":"5.15425000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"4","2":"2012","3":"Planaltina","4":"DF","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"8.05000","9":"19.25000","10":"2191.6250","11":"1.55250000","12":"16.0500","13":"35.5000","14":"6.36450000","15":"1747.4375"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"Abacus","7":"PYRA+EPOX","8":"2.36250","9":"4.06250","10":"2626.6275","11":"0.10114850","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"2.43250","9":"4.40500","10":"2600.6575","11":"0.12870150","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"check","7":"AACHECK","8":"4.48000","9":"7.71250","10":"2148.3075","11":"0.35126025","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"Fox","7":"TFLX+PROT","8":"2.78000","9":"4.74750","10":"2482.5925","11":"0.13413800","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"2.20250","9":"3.55750","10":"2660.9625","11":"0.09216625","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"NTX 3900","7":"AZOX+TEBU","8":"2.51250","9":"4.10000","10":"2570.6725","11":"0.11185650","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"Opera","7":"PYRA+EPOX","8":"2.22500","9":"3.43000","10":"2331.6875","11":"0.08626925","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"5","2":"2012","3":"ItaberÃ¡","4":"SP","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"3.28000","9":"5.05000","10":"2579.2700","11":"0.18710600","12":"4.4800","13":"7.7125","14":"0.35126025","15":"2148.3075"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"Abacus","7":"PYRA+EPOX","8":"14.32500","9":"38.00000","10":"559.0000","11":"5.42880000","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"NA","9":"NA","10":"NA","11":"NA","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"check","7":"AACHECK","8":"18.82500","9":"48.70000","10":"506.0000","11":"9.17202500","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"Fox","7":"TFLX+PROT","8":"10.75000","9":"25.10000","10":"726.0000","11":"2.66107500","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"9.62500","9":"23.00000","10":"751.0000","11":"2.21825000","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"NTX 3900","7":"AZOX+TEBU","8":"11.75000","9":"20.10000","10":"764.0000","11":"2.39155000","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"9.45000","9":"15.20000","10":"964.0000","11":"1.44435000","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"6","2":"2013","3":"Dourados","4":"MS","5":"North","6":"Unizeb800WP","7":"MANC","8":"8.02500","9":"17.50000","10":"957.0000","11":"1.37897500","12":"18.8250","13":"48.7000","14":"9.17202500","15":"506.0000"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"Abacus","7":"PYRA+EPOX","8":"8.72500","9":"17.50000","10":"1536.2500","11":"1.65725000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"6.47500","9":"12.00000","10":"1672.0000","11":"0.78375000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"check","7":"AACHECK","8":"13.07500","9":"22.00000","10":"1562.7500","11":"2.91000000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"Fox","7":"TFLX+PROT","8":"5.10000","9":"9.50000","10":"1936.7500","11":"0.51625000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"6.60000","9":"11.75000","10":"1642.0000","11":"0.79125000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"NTX 3900","7":"AZOX+TEBU","8":"7.62500","9":"13.75000","10":"1629.5000","11":"1.15225000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"5.72500","9":"11.25000","10":"1925.5000","11":"0.65075000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"7","2":"2013","3":"Patos de Minas","4":"MG","5":"North","6":"Unizeb800WP","7":"MANC","8":"8.30000","9":"16.50000","10":"1572.5000","11":"1.42925000","12":"13.0750","13":"22.0000","14":"2.91000000","15":"1562.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"Abacus","7":"PYRA+EPOX","8":"15.32500","9":"32.75000","10":"3343.7500","11":"5.19875000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"16.27500","9":"34.25000","10":"3530.7500","11":"5.86425000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"22.17500","9":"46.50000","10":"3250.7500","11":"10.40700000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"16.22500","9":"34.50000","10":"3522.7500","11":"6.44550000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"16.10000","9":"33.50000","10":"3328.0000","11":"5.42050000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"NTX 3900","7":"AZOX+TEBU","8":"19.05000","9":"40.50000","10":"3229.7500","11":"8.37200000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"21.27500","9":"45.50000","10":"3498.7500","11":"9.96500000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"8","2":"2013","3":"Planaltina","4":"DF","5":"North","6":"Unizeb800WP","7":"MANC","8":"16.17500","9":"34.25000","10":"3874.7500","11":"5.97300000","12":"22.1750","13":"46.5000","14":"10.40700000","15":"3250.7500"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"Abacus","7":"PYRA+EPOX","8":"58.58500","9":"64.50250","10":"1138.9775","11":"37.78643250","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"57.56250","9":"67.84750","10":"1145.9825","11":"40.19645650","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"check","7":"AACHECK","8":"59.87000","9":"68.61250","10":"967.1050","11":"41.85707250","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"Fox","7":"TFLX+PROT","8":"49.65750","9":"61.96250","10":"1501.5825","11":"30.91060325","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"62.55000","9":"74.32500","10":"1293.1525","11":"46.89551400","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"NTX 3900","7":"AZOX+TEBU","8":"61.74500","9":"74.85500","10":"1288.6075","11":"46.43275550","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"51.32250","9":"63.01750","10":"1437.7950","11":"32.76730300","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"9","2":"2013","3":"ItaberÃ¡","4":"SP","5":"South","6":"Unizeb800WP","7":"MANC","8":"57.06000","9":"53.55000","10":"2244.1550","11":"31.33069625","12":"59.8700","13":"68.6125","14":"41.85707250","15":"967.1050"},{"1":"10","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"0.12500","9":"10.00000","10":"3035.5000","11":"0.01325000","12":"3.1750","13":"23.2500","14":"0.73200000","15":"2740.0000"},{"1":"10","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"check","7":"AACHECK","8":"3.17500","9":"23.25000","10":"2740.0000","11":"0.73200000","12":"3.1750","13":"23.2500","14":"0.73200000","15":"2740.0000"},{"1":"10","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Fox","7":"TFLX+PROT","8":"0.10000","9":"7.50000","10":"3104.5000","11":"0.00750000","12":"3.1750","13":"23.2500","14":"0.73200000","15":"2740.0000"},{"1":"10","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"0.17500","9":"12.00000","10":"2942.5000","11":"0.02150000","12":"3.1750","13":"23.2500","14":"0.73200000","15":"2740.0000"},{"1":"10","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"0.12500","9":"10.00000","10":"2994.5000","11":"0.01300000","12":"3.1750","13":"23.2500","14":"0.73200000","15":"2740.0000"},{"1":"10","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Unizeb800WP","7":"MANC","8":"0.10000","9":"8.00000","10":"3077.0000","11":"0.00800000","12":"3.1750","13":"23.2500","14":"0.73200000","15":"2740.0000"},{"1":"11","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"0.00000","9":"2.75000","10":"4310.7500","11":"0.00000000","12":"1.0750","13":"7.2500","14":"0.10625000","15":"4276.2500"},{"1":"11","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"check","7":"AACHECK","8":"1.07500","9":"7.25000","10":"4276.2500","11":"0.10625000","12":"1.0750","13":"7.2500","14":"0.10625000","15":"4276.2500"},{"1":"11","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Fox","7":"TFLX+PROT","8":"0.00000","9":"2.25000","10":"4299.7500","11":"0.00000000","12":"1.0750","13":"7.2500","14":"0.10625000","15":"4276.2500"},{"1":"11","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"0.00000","9":"3.75000","10":"4308.2500","11":"0.00000000","12":"1.0750","13":"7.2500","14":"0.10625000","15":"4276.2500"},{"1":"11","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"0.00000","9":"1.75000","10":"4307.5000","11":"0.00000000","12":"1.0750","13":"7.2500","14":"0.10625000","15":"4276.2500"},{"1":"11","2":"2014","3":"Patos de Minas","4":"MG","5":"North","6":"Unizeb800WP","7":"MANC","8":"0.00000","9":"1.75000","10":"4332.5000","11":"0.00000000","12":"1.0750","13":"7.2500","14":"0.10625000","15":"4276.2500"},{"1":"12","2":"2014","3":"Planaltina","4":"DF","5":"North","6":"Azimut","7":"AZOX+TEBU","8":"93.50000","9":"100.00000","10":"74.5075","11":"93.50000000","12":"97.8250","13":"100.0000","14":"97.82500000","15":"15.6175"},{"1":"12","2":"2014","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"97.82500","9":"100.00000","10":"15.6175","11":"97.82500000","12":"97.8250","13":"100.0000","14":"97.82500000","15":"15.6175"},{"1":"12","2":"2014","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"87.05000","9":"100.00000","10":"39.9275","11":"87.05000000","12":"97.8250","13":"100.0000","14":"97.82500000","15":"15.6175"},{"1":"12","2":"2014","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"90.47500","9":"100.00000","10":"37.4975","11":"90.47500000","12":"97.8250","13":"100.0000","14":"97.82500000","15":"15.6175"},{"1":"12","2":"2014","3":"Planaltina","4":"DF","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"97.22500","9":"100.00000","10":"50.3650","11":"97.22500000","12":"97.8250","13":"100.0000","14":"97.82500000","15":"15.6175"},{"1":"12","2":"2014","3":"Planaltina","4":"DF","5":"North","6":"Unizeb800WP","7":"MANC","8":"78.95000","9":"100.00000","10":"83.4750","11":"78.95000000","12":"97.8250","13":"100.0000","14":"97.82500000","15":"15.6175"},{"1":"13","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"54.13750","9":"76.25000","10":"1396.1100","11":"44.72462500","12":"78.8875","13":"98.5000","14":"77.65875000","15":"901.4350"},{"1":"13","2":"2014","3":"Londrina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"78.88750","9":"98.50000","10":"901.4350","11":"77.65875000","12":"78.8875","13":"98.5000","14":"77.65875000","15":"901.4350"},{"1":"13","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"56.47500","9":"76.50000","10":"1363.7550","11":"46.32600000","12":"78.8875","13":"98.5000","14":"77.65875000","15":"901.4350"},{"1":"13","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"58.70750","9":"86.75000","10":"1298.5800","11":"53.54960000","12":"78.8875","13":"98.5000","14":"77.65875000","15":"901.4350"},{"1":"13","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"56.03750","9":"81.00000","10":"1163.7600","11":"46.90975000","12":"78.8875","13":"98.5000","14":"77.65875000","15":"901.4350"},{"1":"13","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Unizeb800WP","7":"MANC","8":"39.88750","9":"68.25000","10":"1799.7350","11":"32.38575000","12":"78.8875","13":"98.5000","14":"77.65875000","15":"901.4350"},{"1":"14","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"73.75000","9":"58.75000","10":"1050.1875","11":"43.75000000","12":"94.5000","13":"87.5000","14":"82.61250000","15":"518.7400"},{"1":"14","2":"2014","3":"Londrina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"94.50000","9":"87.50000","10":"518.7400","11":"82.61250000","12":"94.5000","13":"87.5000","14":"82.61250000","15":"518.7400"},{"1":"14","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"76.25000","9":"57.50000","10":"974.4925","11":"43.87500000","12":"94.5000","13":"87.5000","14":"82.61250000","15":"518.7400"},{"1":"14","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"77.50000","9":"65.00000","10":"928.0950","11":"50.06250000","12":"94.5000","13":"87.5000","14":"82.61250000","15":"518.7400"},{"1":"14","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"77.50000","9":"60.00000","10":"935.1225","11":"46.37500000","12":"94.5000","13":"87.5000","14":"82.61250000","15":"518.7400"},{"1":"14","2":"2014","3":"Londrina","4":"PR","5":"South","6":"Unizeb800WP","7":"MANC","8":"55.00000","9":"32.50000","10":"1687.5000","11":"18.12500000","12":"94.5000","13":"87.5000","14":"82.61250000","15":"518.7400"},{"1":"15","2":"2014","3":"ItaberÃ¡","4":"SP","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"16.63250","9":"32.19500","10":"2400.1475","11":"5.65990150","12":"28.6775","13":"49.1300","14":"14.48255350","15":"2173.0525"},{"1":"15","2":"2014","3":"ItaberÃ¡","4":"SP","5":"South","6":"check","7":"AACHECK","8":"28.67750","9":"49.13000","10":"2173.0525","11":"14.48255350","12":"28.6775","13":"49.1300","14":"14.48255350","15":"2173.0525"},{"1":"15","2":"2014","3":"ItaberÃ¡","4":"SP","5":"South","6":"Fox","7":"TFLX+PROT","8":"19.79500","9":"35.69750","10":"2688.9800","11":"6.93253650","12":"28.6775","13":"49.1300","14":"14.48255350","15":"2173.0525"},{"1":"15","2":"2014","3":"ItaberÃ¡","4":"SP","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"17.88000","9":"31.90000","10":"2593.3050","11":"5.71406025","12":"28.6775","13":"49.1300","14":"14.48255350","15":"2173.0525"},{"1":"15","2":"2014","3":"ItaberÃ¡","4":"SP","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"18.32250","9":"32.78500","10":"2403.4725","11":"6.10230100","12":"28.6775","13":"49.1300","14":"14.48255350","15":"2173.0525"},{"1":"15","2":"2014","3":"ItaberÃ¡","4":"SP","5":"South","6":"Unizeb800WP","7":"MANC","8":"12.96500","9":"24.18000","10":"2882.4325","11":"3.37733950","12":"28.6775","13":"49.1300","14":"14.48255350","15":"2173.0525"},{"1":"16","2":"2014","3":"Palotina","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"37.87500","9":"77.25000","10":"2289.5000","11":"30.30750000","12":"44.5750","13":"86.0000","14":"37.90825000","15":"1281.2500"},{"1":"16","2":"2014","3":"Palotina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"44.57500","9":"86.00000","10":"1281.2500","11":"37.90825000","12":"44.5750","13":"86.0000","14":"37.90825000","15":"1281.2500"},{"1":"16","2":"2014","3":"Palotina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"28.57500","9":"94.00000","10":"2139.5000","11":"26.90750000","12":"44.5750","13":"86.0000","14":"37.90825000","15":"1281.2500"},{"1":"16","2":"2014","3":"Palotina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"20.32500","9":"84.50000","10":"2156.2500","11":"17.39700000","12":"44.5750","13":"86.0000","14":"37.90825000","15":"1281.2500"},{"1":"16","2":"2014","3":"Palotina","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"28.27500","9":"89.50000","10":"2387.5000","11":"25.40950000","12":"44.5750","13":"86.0000","14":"37.90825000","15":"1281.2500"},{"1":"16","2":"2014","3":"Palotina","4":"PR","5":"South","6":"Unizeb800WP","7":"MANC","8":"29.20500","9":"82.75000","10":"2195.7500","11":"24.17112500","12":"44.5750","13":"86.0000","14":"37.90825000","15":"1281.2500"},{"1":"17","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"1.94000","9":"10.50000","10":"3495.1825","11":"0.21422500","12":"14.6150","13":"30.0000","14":"4.49790000","15":"2760.9850"},{"1":"17","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"14.61500","9":"30.00000","10":"2760.9850","11":"4.49790000","12":"14.6150","13":"30.0000","14":"4.49790000","15":"2760.9850"},{"1":"17","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"3.20500","9":"15.25000","10":"3377.4400","11":"0.51560000","12":"14.6150","13":"30.0000","14":"4.49790000","15":"2760.9850"},{"1":"17","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"4.92750","9":"15.50000","10":"3215.8175","11":"0.77392500","12":"14.6150","13":"30.0000","14":"4.49790000","15":"2760.9850"},{"1":"17","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"3.60000","9":"14.25000","10":"3486.7650","11":"0.55305000","12":"14.6150","13":"30.0000","14":"4.49790000","15":"2760.9850"},{"1":"17","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Unizeb800WP","7":"MANC","8":"6.23250","9":"16.50000","10":"3179.0950","11":"1.11805000","12":"14.6150","13":"30.0000","14":"4.49790000","15":"2760.9850"},{"1":"18","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"2.45750","9":"12.75000","10":"3309.3425","11":"0.31485000","12":"22.1050","13":"36.2500","14":"8.07725000","15":"2937.0475"},{"1":"18","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"22.10500","9":"36.25000","10":"2937.0475","11":"8.07725000","12":"22.1050","13":"36.2500","14":"8.07725000","15":"2937.0475"},{"1":"18","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"4.37500","9":"21.00000","10":"3242.2275","11":"0.91787500","12":"22.1050","13":"36.2500","14":"8.07725000","15":"2937.0475"},{"1":"18","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"7.01250","9":"22.00000","10":"3186.7650","11":"1.54362500","12":"22.1050","13":"36.2500","14":"8.07725000","15":"2937.0475"},{"1":"18","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Tebuco Nortox","7":"TEBU","8":"5.13750","9":"21.00000","10":"3215.4525","11":"1.07375000","12":"22.1050","13":"36.2500","14":"8.07725000","15":"2937.0475"},{"1":"18","2":"2014","3":"Palmeira","4":"PR","5":"South","6":"Unizeb800WP","7":"MANC","8":"10.50000","9":"26.50000","10":"3028.7225","11":"2.79075000","12":"22.1050","13":"36.2500","14":"8.07725000","15":"2937.0475"},{"1":"19","2":"2015","3":"Londrina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"83.95000","9":"87.50000","10":"71.0000","11":"74.21540000","12":"83.9500","13":"87.5000","14":"74.21540000","15":"71.0000"},{"1":"19","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"27.75000","9":"36.87500","10":"863.7500","11":"10.86090000","12":"83.9500","13":"87.5000","14":"74.21540000","15":"71.0000"},{"1":"19","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Manzate800WP","7":"MANC","8":"33.95000","9":"43.97500","10":"507.2500","11":"15.55630000","12":"83.9500","13":"87.5000","14":"74.21540000","15":"71.0000"},{"1":"19","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"48.37500","9":"63.65000","10":"561.7500","11":"31.80965000","12":"83.9500","13":"87.5000","14":"74.21540000","15":"71.0000"},{"1":"19","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"31.19750","9":"51.22500","10":"701.5000","11":"16.25735000","12":"83.9500","13":"87.5000","14":"74.21540000","15":"71.0000"},{"1":"20","2":"2015","3":"Londrina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"68.87500","9":"31.80750","10":"761.2700","11":"22.79101250","12":"68.8750","13":"31.8075","14":"22.79101250","15":"761.2700"},{"1":"20","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"45.12500","9":"14.47750","10":"984.2375","11":"6.73256250","12":"68.8750","13":"31.8075","14":"22.79101250","15":"761.2700"},{"1":"20","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Manzate800WP","7":"MANC","8":"18.62500","9":"3.51250","10":"1226.0875","11":"0.65512500","12":"68.8750","13":"31.8075","14":"22.79101250","15":"761.2700"},{"1":"20","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"45.87500","9":"18.22750","10":"960.6700","11":"8.43523750","12":"68.8750","13":"31.8075","14":"22.79101250","15":"761.2700"},{"1":"20","2":"2015","3":"Londrina","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"24.62500","9":"4.56250","10":"1305.2600","11":"1.26606250","12":"68.8750","13":"31.8075","14":"22.79101250","15":"761.2700"},{"1":"21","2":"2015","3":"Palmeira","4":"PR","5":"South","6":"Azimut","7":"AZOX+TEBU","8":"10.50000","9":"1.94000","10":"1485.3825","11":"0.21422500","12":"30.0000","13":"14.6150","14":"4.49790000","15":"1100.5900"},{"1":"21","2":"2015","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"30.00000","9":"14.61500","10":"1100.5900","11":"4.49790000","12":"30.0000","13":"14.6150","14":"4.49790000","15":"1100.5900"},{"1":"21","2":"2015","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"15.25000","9":"3.20500","10":"1725.2850","11":"0.51560000","12":"30.0000","13":"14.6150","14":"4.49790000","15":"1100.5900"},{"1":"21","2":"2015","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"15.50000","9":"4.92750","10":"1453.7950","11":"0.77392500","12":"30.0000","13":"14.6150","14":"4.49790000","15":"1100.5900"},{"1":"21","2":"2015","3":"Palmeira","4":"PR","5":"South","6":"Unizeb800WP","7":"MANC","8":"16.50000","9":"6.23250","10":"1628.0125","11":"1.11805000","12":"30.0000","13":"14.6150","14":"4.49790000","15":"1100.5900"},{"1":"22","2":"2015","3":"ItaberÃ¡","4":"SP","5":"South","6":"check","7":"AACHECK","8":"64.10000","9":"57.87250","10":"1566.3500","11":"39.28198725","12":"64.1000","13":"57.8725","14":"39.28198725","15":"1566.3500"},{"1":"22","2":"2015","3":"ItaberÃ¡","4":"SP","5":"South","6":"Fox","7":"TFLX+PROT","8":"61.37500","9":"51.84750","10":"1640.1225","11":"33.69757400","12":"64.1000","13":"57.8725","14":"39.28198725","15":"1566.3500"},{"1":"22","2":"2015","3":"ItaberÃ¡","4":"SP","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"67.53250","9":"60.62000","10":"1447.1800","11":"41.56332025","12":"64.1000","13":"57.8725","14":"39.28198725","15":"1566.3500"},{"1":"23","2":"2015","3":"Campo Verde","4":"MT","5":"North","6":"check","7":"AACHECK","8":"70.28750","9":"100.00000","10":"NA","11":"70.28750000","12":"70.2875","13":"100.0000","14":"70.28750000","15":"NA"},{"1":"23","2":"2015","3":"Campo Verde","4":"MT","5":"North","6":"Fox","7":"TFLX+PROT","8":"54.04500","9":"97.50000","10":"NA","11":"53.30875000","12":"70.2875","13":"100.0000","14":"70.28750000","15":"NA"},{"1":"23","2":"2015","3":"Campo Verde","4":"MT","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"51.45000","9":"82.50000","10":"NA","11":"44.57250000","12":"70.2875","13":"100.0000","14":"70.28750000","15":"NA"},{"1":"23","2":"2015","3":"Campo Verde","4":"MT","5":"North","6":"Unizeb Gold","7":"MANC","8":"39.32500","9":"85.00000","10":"NA","11":"34.94000000","12":"70.2875","13":"100.0000","14":"70.28750000","15":"NA"},{"1":"24","2":"2015","3":"Uberaba","4":"MG","5":"North","6":"check","7":"AACHECK","8":"69.25000","9":"41.84500","10":"NA","11":"29.29867500","12":"69.2500","13":"41.8450","14":"29.29867500","15":"NA"},{"1":"24","2":"2015","3":"Uberaba","4":"MG","5":"North","6":"Fox","7":"TFLX+PROT","8":"50.00000","9":"30.63000","10":"NA","11":"16.29050000","12":"69.2500","13":"41.8450","14":"29.29867500","15":"NA"},{"1":"24","2":"2015","3":"Uberaba","4":"MG","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"55.00000","9":"30.40000","10":"NA","11":"17.26090000","12":"69.2500","13":"41.8450","14":"29.29867500","15":"NA"},{"1":"24","2":"2015","3":"Uberaba","4":"MG","5":"North","6":"Unizeb800WP","7":"MANC","8":"66.75000","9":"32.38000","10":"NA","11":"22.16345000","12":"69.2500","13":"41.8450","14":"29.29867500","15":"NA"},{"1":"25","2":"2016","3":"Londrina","4":"PR","5":"South","6":"check","7":"AACHECK","8":"8.50000","9":"15.75000","10":"1187.7500","11":"1.61500000","12":"8.5000","13":"15.7500","14":"1.61500000","15":"1187.7500"},{"1":"25","2":"2016","3":"Londrina","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"8.50000","9":"13.25000","10":"1755.0000","11":"1.34500000","12":"8.5000","13":"15.7500","14":"1.61500000","15":"1187.7500"},{"1":"25","2":"2016","3":"Londrina","4":"PR","5":"South","6":"Manzate800WP","7":"MANC","8":"3.25000","9":"8.25000","10":"1588.7500","11":"0.30750000","12":"8.5000","13":"15.7500","14":"1.61500000","15":"1187.7500"},{"1":"25","2":"2016","3":"Londrina","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"5.00000","9":"8.00000","10":"1734.5000","11":"0.53000000","12":"8.5000","13":"15.7500","14":"1.61500000","15":"1187.7500"},{"1":"25","2":"2016","3":"Londrina","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"3.25000","9":"5.75000","10":"1266.5000","11":"0.24500000","12":"8.5000","13":"15.7500","14":"1.61500000","15":"1187.7500"},{"1":"26","2":"2016","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"7.92500","9":"3.17000","10":"2521.6900","11":"0.25024250","12":"7.9250","13":"3.1700","14":"0.25024250","15":"2521.6900"},{"1":"26","2":"2016","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"2.20000","9":"1.34000","10":"2959.4000","11":"0.02892500","12":"7.9250","13":"3.1700","14":"0.25024250","15":"2521.6900"},{"1":"26","2":"2016","3":"Palmeira","4":"PR","5":"South","6":"Manzate800WP","7":"MANC","8":"3.12500","9":"1.47250","10":"3170.7000","11":"0.04606000","12":"7.9250","13":"3.1700","14":"0.25024250","15":"2521.6900"},{"1":"26","2":"2016","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"4.85000","9":"1.65750","10":"2713.6700","11":"0.07561500","12":"7.9250","13":"3.1700","14":"0.25024250","15":"2521.6900"},{"1":"26","2":"2016","3":"Palmeira","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"3.15000","9":"1.19500","10":"3129.5450","11":"0.03659500","12":"7.9250","13":"3.1700","14":"0.25024250","15":"2521.6900"},{"1":"27","2":"2016","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"7.50000","9":"0.75000","10":"1449.5000","11":"0.07500000","12":"7.5000","13":"0.7500","14":"0.07500000","15":"1449.5000"},{"1":"27","2":"2016","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"2.50000","9":"0.25000","10":"1501.7500","11":"0.02500000","12":"7.5000","13":"0.7500","14":"0.07500000","15":"1449.5000"},{"1":"27","2":"2016","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"7.50000","9":"0.75000","10":"1390.0000","11":"0.12500000","12":"7.5000","13":"0.7500","14":"0.07500000","15":"1449.5000"},{"1":"27","2":"2016","3":"Planaltina","4":"DF","5":"North","6":"Unizeb Gold","7":"MANC","8":"2.50000","9":"0.25000","10":"1667.2500","11":"0.02500000","12":"7.5000","13":"0.7500","14":"0.07500000","15":"1449.5000"},{"1":"28","2":"2016","3":"Campo Verde","4":"MT","5":"North","6":"check","7":"AACHECK","8":"62.80000","9":"19.50000","10":"562.0000","11":"12.32850000","12":"62.8000","13":"19.5000","14":"12.32850000","15":"562.0000"},{"1":"28","2":"2016","3":"Campo Verde","4":"MT","5":"North","6":"Fox","7":"TFLX+PROT","8":"66.40000","9":"20.00000","10":"683.7500","11":"13.28000000","12":"62.8000","13":"19.5000","14":"12.32850000","15":"562.0000"},{"1":"28","2":"2016","3":"Campo Verde","4":"MT","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"67.82500","9":"20.00000","10":"736.2500","11":"13.56500000","12":"62.8000","13":"19.5000","14":"12.32850000","15":"562.0000"},{"1":"28","2":"2016","3":"Campo Verde","4":"MT","5":"North","6":"Unizeb Gold","7":"MANC","8":"54.60000","9":"20.00000","10":"850.7500","11":"10.92000000","12":"62.8000","13":"19.5000","14":"12.32850000","15":"562.0000"},{"1":"29","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"check","7":"AACHECK","8":"41.25000","9":"NA","10":"632.7500","11":"NA","12":"41.2500","13":"NA","14":"NA","15":"632.7500"},{"1":"29","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"Fox","7":"TFLX+PROT","8":"29.50000","9":"NA","10":"634.5000","11":"NA","12":"41.2500","13":"NA","14":"NA","15":"632.7500"},{"1":"29","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"33.75000","9":"NA","10":"535.5000","11":"NA","12":"41.2500","13":"NA","14":"NA","15":"632.7500"},{"1":"30","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"check","7":"AACHECK","8":"40.50000","9":"NA","10":"862.5000","11":"NA","12":"40.5000","13":"NA","14":"NA","15":"862.5000"},{"1":"30","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"Fox","7":"TFLX+PROT","8":"30.50000","9":"NA","10":"817.5000","11":"NA","12":"40.5000","13":"NA","14":"NA","15":"862.5000"},{"1":"30","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"41.75000","9":"NA","10":"936.5000","11":"NA","12":"40.5000","13":"NA","14":"NA","15":"862.5000"},{"1":"30","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"Opera","7":"PYRA+EPOX","8":"28.50000","9":"NA","10":"869.7500","11":"NA","12":"40.5000","13":"NA","14":"NA","15":"862.5000"},{"1":"30","2":"2017","3":"Campo Verde","4":"MT","5":"North","6":"Unizeb Gold","7":"MANC","8":"31.75000","9":"NA","10":"1068.0000","11":"NA","12":"40.5000","13":"NA","14":"NA","15":"862.5000"},{"1":"31","2":"2017","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"5.67500","9":"7.60000","10":"1231.2500","11":"0.42932500","12":"5.6750","13":"7.6000","14":"0.42932500","15":"1231.2500"},{"1":"31","2":"2017","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"1.85000","9":"4.10000","10":"1033.0000","11":"0.08375000","12":"5.6750","13":"7.6000","14":"0.42932500","15":"1231.2500"},{"1":"31","2":"2017","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"3.15000","9":"3.95000","10":"1220.7500","11":"0.12402500","12":"5.6750","13":"7.6000","14":"0.42932500","15":"1231.2500"},{"1":"31","2":"2017","3":"Planaltina","4":"DF","5":"North","6":"Tebuco Nortox","7":"TEBU","8":"3.00000","9":"5.57500","10":"1301.5000","11":"0.18047500","12":"5.6750","13":"7.6000","14":"0.42932500","15":"1231.2500"},{"1":"31","2":"2017","3":"Planaltina","4":"DF","5":"North","6":"Unizeb Gold","7":"MANC","8":"2.62500","9":"6.17500","10":"1243.2500","11":"0.17810000","12":"5.6750","13":"7.6000","14":"0.42932500","15":"1231.2500"},{"1":"32","2":"2017","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"8.57500","9":"27.50000","10":"2456.0000","11":"2.36247500","12":"8.5750","13":"27.5000","14":"2.36247500","15":"2456.0000"},{"1":"32","2":"2017","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"2.95000","9":"31.67500","10":"2870.0000","11":"0.93100000","12":"8.5750","13":"27.5000","14":"2.36247500","15":"2456.0000"},{"1":"32","2":"2017","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"2.45000","9":"27.50000","10":"2898.2500","11":"0.68087500","12":"8.5750","13":"27.5000","14":"2.36247500","15":"2456.0000"},{"1":"32","2":"2017","3":"Palmeira","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"3.30000","9":"32.50000","10":"2658.7500","11":"1.07490000","12":"8.5750","13":"27.5000","14":"2.36247500","15":"2456.0000"},{"1":"32","2":"2017","3":"Palmeira","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"2.32500","9":"28.32500","10":"2932.0000","11":"0.66735000","12":"8.5750","13":"27.5000","14":"2.36247500","15":"2456.0000"},{"1":"33","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"check","7":"AACHECK","8":"7.07500","9":"17.35750","10":"2887.5000","11":"1.35340250","12":"7.0750","13":"17.3575","14":"1.35340250","15":"2887.5000"},{"1":"33","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"1.50000","9":"6.19750","10":"3017.0000","11":"0.13070750","12":"7.0750","13":"17.3575","14":"1.35340250","15":"2887.5000"},{"1":"33","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"5.57500","9":"6.09500","10":"2920.2500","11":"0.88029500","12":"7.0750","13":"17.3575","14":"1.35340250","15":"2887.5000"},{"1":"33","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"NA","9":"NA","10":"3000.7500","11":"NA","12":"7.0750","13":"17.3575","14":"1.35340250","15":"2887.5000"},{"1":"33","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"1.05000","9":"4.81000","10":"3055.7500","11":"0.06354000","12":"7.0750","13":"17.3575","14":"1.35340250","15":"2887.5000"},{"1":"34","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"check","7":"AACHECK","8":"1.65500","9":"7.13250","10":"2956.7500","11":"0.11224050","12":"1.6550","13":"7.1325","14":"0.11224050","15":"2956.7500"},{"1":"34","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"1.31250","9":"4.61000","10":"2753.7500","11":"0.06352125","12":"1.6550","13":"7.1325","14":"0.11224050","15":"2956.7500"},{"1":"34","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"2.17500","9":"7.40250","10":"2833.5000","11":"0.17435200","12":"1.6550","13":"7.1325","14":"0.11224050","15":"2956.7500"},{"1":"34","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"2.60750","9":"6.21750","10":"2849.2500","11":"0.20354450","12":"1.6550","13":"7.1325","14":"0.11224050","15":"2956.7500"},{"1":"34","2":"2017","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"0.58250","9":"3.68250","10":"2899.0000","11":"0.03718500","12":"1.6550","13":"7.1325","14":"0.11224050","15":"2956.7500"},{"1":"35","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"check","7":"AACHECK","8":"7.20500","9":"9.06750","10":"1287.5000","11":"0.91675275","12":"7.2050","13":"9.0675","14":"0.91675275","15":"1287.5000"},{"1":"35","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"1.61250","9":"2.40000","10":"1341.7500","11":"0.07116700","12":"7.2050","13":"9.0675","14":"0.91675275","15":"1287.5000"},{"1":"35","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"4.23250","9":"5.06500","10":"1525.7500","11":"0.33410125","12":"7.2050","13":"9.0675","14":"0.91675275","15":"1287.5000"},{"1":"35","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"4.27000","9":"5.69000","10":"1661.2500","11":"0.29999625","12":"7.2050","13":"9.0675","14":"0.91675275","15":"1287.5000"},{"1":"35","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"3.64625","9":"5.08875","10":"1392.1250","11":"0.21899613","12":"7.2050","13":"9.0675","14":"0.91675275","15":"1287.5000"},{"1":"36","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"check","7":"AACHECK","8":"1.49000","9":"5.95000","10":"2099.2500","11":"0.09186625","12":"1.4900","13":"5.9500","14":"0.09186625","15":"2099.2500"},{"1":"36","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"0.53250","9":"4.31750","10":"2171.2500","11":"0.03083150","12":"1.4900","13":"5.9500","14":"0.09186625","15":"2099.2500"},{"1":"36","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"0.43000","9":"4.39250","10":"2411.5000","11":"0.02469525","12":"1.4900","13":"5.9500","14":"0.09186625","15":"2099.2500"},{"1":"36","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"1.12000","9":"5.26000","10":"NA","11":"0.05864500","12":"1.4900","13":"5.9500","14":"0.09186625","15":"2099.2500"},{"1":"36","2":"2018","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"2.16125","9":"7.31750","10":"2219.0000","11":"0.22209800","12":"1.4900","13":"5.9500","14":"0.09186625","15":"2099.2500"},{"1":"37","2":"2018","3":"Campo Verde","4":"MT","5":"North","6":"check","7":"AACHECK","8":"39.00750","9":"68.00000","10":"1000.0000","11":"26.04410000","12":"39.0075","13":"68.0000","14":"26.04410000","15":"1000.0000"},{"1":"37","2":"2018","3":"Campo Verde","4":"MT","5":"North","6":"Fox","7":"TFLX+PROT","8":"35.67750","9":"74.00000","10":"1500.2500","11":"26.41680000","12":"39.0075","13":"68.0000","14":"26.04410000","15":"1000.0000"},{"1":"37","2":"2018","3":"Campo Verde","4":"MT","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"37.74250","9":"74.25000","10":"1250.0000","11":"28.10847500","12":"39.0075","13":"68.0000","14":"26.04410000","15":"1000.0000"},{"1":"37","2":"2018","3":"Campo Verde","4":"MT","5":"North","6":"Opera","7":"PYRA+EPOX","8":"36.12000","9":"74.25000","10":"1645.7500","11":"26.81512500","12":"39.0075","13":"68.0000","14":"26.04410000","15":"1000.0000"},{"1":"37","2":"2018","3":"Campo Verde","4":"MT","5":"North","6":"Unizeb Gold","7":"MANC","8":"40.00500","9":"71.00000","10":"1729.2500","11":"28.42925000","12":"39.0075","13":"68.0000","14":"26.04410000","15":"1000.0000"},{"1":"38","2":"2018","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"47.52500","9":"59.00000","10":"2107.3250","11":"28.02275000","12":"47.5250","13":"59.0000","14":"28.02275000","15":"2107.3250"},{"1":"38","2":"2018","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"29.17500","9":"42.75000","10":"2258.7000","11":"12.46837500","12":"47.5250","13":"59.0000","14":"28.02275000","15":"2107.3250"},{"1":"38","2":"2018","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"35.27500","9":"43.75000","10":"2257.4500","11":"15.44100000","12":"47.5250","13":"59.0000","14":"28.02275000","15":"2107.3250"},{"1":"38","2":"2018","3":"Palmeira","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"19.20000","9":"34.00000","10":"2222.8000","11":"6.59725000","12":"47.5250","13":"59.0000","14":"28.02275000","15":"2107.3250"},{"1":"38","2":"2018","3":"Palmeira","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"16.18125","9":"32.25000","10":"2675.7500","11":"5.24093750","12":"47.5250","13":"59.0000","14":"28.02275000","15":"2107.3250"},{"1":"39","2":"2018","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"53.50000","9":"94.01750","10":"687.1000","11":"50.29355000","12":"53.5000","13":"94.0175","14":"50.29355000","15":"687.1000"},{"1":"39","2":"2018","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"45.50000","9":"98.75250","10":"1165.8250","11":"44.91852500","12":"53.5000","13":"94.0175","14":"50.29355000","15":"687.1000"},{"1":"39","2":"2018","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"39.25000","9":"85.25000","10":"1049.1750","11":"35.79000000","12":"53.5000","13":"94.0175","14":"50.29355000","15":"687.1000"},{"1":"39","2":"2018","3":"Planaltina","4":"DF","5":"North","6":"Opera","7":"PYRA+EPOX","8":"38.50000","9":"100.00000","10":"832.9250","11":"38.50000000","12":"53.5000","13":"94.0175","14":"50.29355000","15":"687.1000"},{"1":"39","2":"2018","3":"Planaltina","4":"DF","5":"North","6":"Unizeb Gold","7":"MANC","8":"44.37500","9":"95.13500","10":"1262.9125","11":"42.28287500","12":"53.5000","13":"94.0175","14":"50.29355000","15":"687.1000"},{"1":"40","2":"2019","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"100.00000","9":"100.00000","10":"59.8750","11":"100.00000000","12":"100.0000","13":"100.0000","14":"100.00000000","15":"59.8750"},{"1":"40","2":"2019","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"100.00000","9":"100.00000","10":"120.3550","11":"100.00000000","12":"100.0000","13":"100.0000","14":"100.00000000","15":"59.8750"},{"1":"40","2":"2019","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"100.00000","9":"100.00000","10":"121.7700","11":"100.00000000","12":"100.0000","13":"100.0000","14":"100.00000000","15":"59.8750"},{"1":"40","2":"2019","3":"Planaltina","4":"DF","5":"North","6":"Opera","7":"PYRA+EPOX","8":"100.00000","9":"100.00000","10":"89.3125","11":"100.00000000","12":"100.0000","13":"100.0000","14":"100.00000000","15":"59.8750"},{"1":"40","2":"2019","3":"Planaltina","4":"DF","5":"North","6":"Unizeb Gold","7":"MANC","8":"100.00000","9":"100.00000","10":"125.4375","11":"100.00000000","12":"100.0000","13":"100.0000","14":"100.00000000","15":"59.8750"},{"1":"41","2":"2019","3":"Guarapuava","4":"PR","5":"South","6":"check","7":"AACHECK","8":"92.79250","9":"96.69250","10":"571.6430","11":"89.86397475","12":"92.7925","13":"96.6925","14":"89.86397475","15":"571.6430"},{"1":"41","2":"2019","3":"Guarapuava","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"92.85500","9":"91.53000","10":"672.8475","11":"85.15906100","12":"92.7925","13":"96.6925","14":"89.86397475","15":"571.6430"},{"1":"41","2":"2019","3":"Guarapuava","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"85.74000","9":"87.23000","10":"245.3360","11":"74.83397800","12":"92.7925","13":"96.6925","14":"89.86397475","15":"571.6430"},{"1":"41","2":"2019","3":"Guarapuava","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"94.48250","9":"95.40250","10":"851.3650","11":"90.14378825","12":"92.7925","13":"96.6925","14":"89.86397475","15":"571.6430"},{"1":"41","2":"2019","3":"Guarapuava","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"93.78250","9":"93.04000","10":"967.3250","11":"87.40383375","12":"92.7925","13":"96.6925","14":"89.86397475","15":"571.6430"},{"1":"42","2":"2019","3":"Palmeira","4":"PR","5":"South","6":"check","7":"AACHECK","8":"16.30000","9":"25.00000","10":"607.5408","11":"4.27700000","12":"16.3000","13":"25.0000","14":"4.27700000","15":"607.5408"},{"1":"42","2":"2019","3":"Palmeira","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"6.95000","9":"9.50000","10":"1812.8300","11":"0.69500000","12":"16.3000","13":"25.0000","14":"4.27700000","15":"607.5408"},{"1":"42","2":"2019","3":"Palmeira","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"7.95000","9":"11.00000","10":"1722.6250","11":"0.89100000","12":"16.3000","13":"25.0000","14":"4.27700000","15":"607.5408"},{"1":"42","2":"2019","3":"Palmeira","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"5.30000","9":"4.50000","10":"1825.6225","11":"0.23400000","12":"16.3000","13":"25.0000","14":"4.27700000","15":"607.5408"},{"1":"42","2":"2019","3":"Palmeira","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"9.25000","9":"12.75000","10":"1537.5763","11":"1.52050000","12":"16.3000","13":"25.0000","14":"4.27700000","15":"607.5408"},{"1":"43","2":"2020","3":"Campo MourÃ£o","4":"PR","5":"South","6":"check","7":"AACHECK","8":"0.00000","9":"0.00000","10":"788.0190","11":"0.00000000","12":"0.0000","13":"0.0000","14":"0.00000000","15":"788.0190"},{"1":"43","2":"2020","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Fox","7":"TFLX+PROT","8":"0.00000","9":"0.00000","10":"1376.7260","11":"0.00000000","12":"0.0000","13":"0.0000","14":"0.00000000","15":"788.0190"},{"1":"43","2":"2020","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Nativo","7":"TFLX+TEBU","8":"0.00000","9":"0.00000","10":"1450.6040","11":"0.00000000","12":"0.0000","13":"0.0000","14":"0.00000000","15":"788.0190"},{"1":"43","2":"2020","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Opera","7":"PYRA+EPOX","8":"0.00000","9":"0.00000","10":"1021.7560","11":"0.00000000","12":"0.0000","13":"0.0000","14":"0.00000000","15":"788.0190"},{"1":"43","2":"2020","3":"Campo MourÃ£o","4":"PR","5":"South","6":"Unizeb Gold","7":"MANC","8":"0.00000","9":"0.00000","10":"1497.6070","11":"0.00000000","12":"0.0000","13":"0.0000","14":"0.00000000","15":"788.0190"},{"1":"44","2":"2020","3":"Planaltina","4":"DF","5":"North","6":"check","7":"AACHECK","8":"82.89500","9":"95.42750","10":"360.1000","11":"79.46728750","12":"82.8950","13":"95.4275","14":"79.46728750","15":"360.1000"},{"1":"44","2":"2020","3":"Planaltina","4":"DF","5":"North","6":"Fox","7":"TFLX+PROT","8":"76.78000","9":"99.00000","10":"600.5750","11":"76.01850000","12":"82.8950","13":"95.4275","14":"79.46728750","15":"360.1000"},{"1":"44","2":"2020","3":"Planaltina","4":"DF","5":"North","6":"Nativo","7":"TFLX+TEBU","8":"78.59500","9":"93.75000","10":"571.2500","11":"73.69410000","12":"82.8950","13":"95.4275","14":"79.46728750","15":"360.1000"},{"1":"44","2":"2020","3":"Planaltina","4":"DF","5":"North","6":"Opera","7":"PYRA+EPOX","8":"81.97500","9":"99.50000","10":"499.7250","11":"81.55850000","12":"82.8950","13":"95.4275","14":"79.46728750","15":"360.1000"},{"1":"44","2":"2020","3":"Planaltina","4":"DF","5":"North","6":"Unizeb Gold","7":"MANC","8":"79.31250","9":"97.50000","10":"679.4125","11":"77.31672500","12":"82.8950","13":"95.4275","14":"79.46728750","15":"360.1000"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div id="histogramas" class="section level2">
+<h2>Histogramas</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Log of the Effect-sizes</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>wb_expl_plot <span class="ot">&lt;-</span> wb_expl_plot <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_index =</span> <span class="fu">log</span>(mean_index),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_yld =</span> <span class="fu">log</span>(mean_yld))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>hist_log_index <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wb_expl_plot, <span class="fu">aes</span>(log_index)) <span class="sc">+</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bin =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>() <span class="sc">+</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;log(WB index)&quot;</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>hist_index <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wb_expl_plot, <span class="fu">aes</span>(mean_index)) <span class="sc">+</span> </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bin =</span> <span class="dv">10</span>, <span class="at">fill =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;WB index (%)&quot;</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>hist_yld <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wb_expl_plot, <span class="fu">aes</span>(mean_yld)) <span class="sc">+</span> </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bin =</span> <span class="dv">10</span>,<span class="at">fill =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>() <span class="sc">+</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Yield (Kg/ha)&quot;</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>hist_plot <span class="ot">&lt;-</span> <span class="fu">plot_grid</span>(hist_index, hist_log_index, hist_yld, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">align =</span> <span class="st">&quot;V&quot;</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hist_plot</span></code></pre></div>
+<p><img src="plots_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Figures/histograms.png&quot;</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">9</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div>
+</div>
+<div id="map" class="section level2">
+<h2>Map</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Municipalities where trials were carried out.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearth)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearthhires)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(maps)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;maps&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     map</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span></code></pre></div>
+<pre><code>## Google&#39;s Terms of Service: https://cloud.google.com/maps-platform/terms/.</code></pre>
+<pre><code>## Please cite ggmap if you use it! See citation(&quot;ggmap&quot;) for details.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;ggmap&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:magrittr&#39;:
+## 
+##     inset</code></pre>
+<pre><code>## The following object is masked from &#39;package:cowplot&#39;:
+## 
+##     theme_nothing</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggspatial) </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/maps.xlsx&quot;</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>BRA <span class="ot">=</span> <span class="fu">ne_states</span>(</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">country =</span> <span class="st">&quot;Brazil&quot;</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">filter</span>(BRA, </span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;Paraná&quot;</span><span class="sc">|</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;São Paulo&quot;</span><span class="sc">|</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;Mato Grosso&quot;</span><span class="sc">|</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;Mato Grosso do Sul&quot;</span><span class="sc">|</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;Goiás&quot;</span><span class="sc">|</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;Minas Gerais&quot;</span><span class="sc">|</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>                 name_pt <span class="sc">==</span> <span class="st">&quot;Distrito Federal&quot;</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>states <span class="ot">=</span> states <span class="sc">%&gt;%</span> </span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">case_when</span>(</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;Paraná&quot;</span> <span class="sc">~</span> <span class="st">&quot;PR&quot;</span>,</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;São Paulo&quot;</span> <span class="sc">~</span> <span class="st">&quot;SP&quot;</span>,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;Mato Grosso&quot;</span> <span class="sc">~</span> <span class="st">&quot;MT&quot;</span>,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;Mato Grosso do Sul&quot;</span> <span class="sc">~</span> <span class="st">&quot;MS&quot;</span>,</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;Goiás&quot;</span> <span class="sc">~</span> <span class="st">&quot;GO&quot;</span>,</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;Minas Gerais&quot;</span> <span class="sc">~</span> <span class="st">&quot;MG&quot;</span>,</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    name_pt <span class="sc">==</span> <span class="st">&quot;Distrito Federal&quot;</span> <span class="sc">~</span> <span class="st">&quot;DF&quot;</span>))</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>SUL <span class="ot">=</span> <span class="fu">ne_states</span>(</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">country =</span> <span class="fu">c</span>(<span class="st">&quot;Argentina&quot;</span>, <span class="st">&quot;Uruguay&quot;</span>, <span class="st">&quot;Paraguay&quot;</span>, <span class="st">&quot;Colombia&quot;</span>, <span class="st">&quot;Bolivia&quot;</span>),</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>br_sf <span class="ot">&lt;-</span> <span class="fu">ne_states</span>(<span class="at">geounit =</span> <span class="st">&quot;brazil&quot;</span>,</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>                   <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>map <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> SUL, <span class="at">fill =</span> <span class="st">&quot;gray95&quot;</span>, <span class="at">color =</span> <span class="st">&quot;gray95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> BRA, <span class="at">fill =</span> <span class="st">&quot;gray98&quot;</span>, <span class="at">color=</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">size =</span><span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> states, <span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude), <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;gray40&quot;</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> states, <span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude,  <span class="at">label =</span> id), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">hjust =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>)<span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">data =</span> map, <span class="fu">aes</span>(<span class="fu">as.numeric</span>(lon), <span class="fu">as.numeric</span>(lat), <span class="at">size =</span> n_trials, <span class="at">color =</span> region), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data =</span> map, <span class="fu">aes</span> (<span class="at">x =</span> <span class="fu">as.numeric</span>(lon), <span class="at">y =</span> <span class="fu">as.numeric</span>(lat), <span class="at">label =</span> n_trials), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">box.padding =</span> <span class="fl">0.7</span>, <span class="at">min.segment.length =</span> <span class="fl">0.2</span>, <span class="at">segment.alpha =</span> <span class="dv">1</span>, <span class="at">seed =</span> F, <span class="at">max.overlaps =</span> <span class="cn">Inf</span>)<span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">color =</span> <span class="st">&quot;Region&quot;</span>, <span class="at">size =</span> <span class="st">&quot;Number of Trials&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">12</span>))<span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#theme_bw()+</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_grid</span>()<span class="sc">+</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;bl&quot;</span>, <span class="at">width_hint =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">65</span>,<span class="sc">-</span><span class="dv">40</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">32</span>, <span class="sc">-</span><span class="dv">9</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_calc</span>()<span class="sc">+</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title.align =</span> <span class="fl">0.5</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span>  <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">10</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">10</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">size=</span>.<span class="dv">2</span>),</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;#d2eeff&quot;</span>)</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        )<span class="sc">+</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;bl&quot;</span>, <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>, <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>), <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;in&quot;</span>), <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">fill =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;gray96&quot;</span>)), <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.9</span>, <span class="st">&quot;cm&quot;</span>), <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.8</span>, <span class="st">&quot;cm&quot;</span>))<span class="sc">+</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">size=</span>F)</span></code></pre></div>
+<pre><code>## Warning: Ignoring unknown aesthetics: x, y</code></pre>
+<pre><code>## Warning: Ignoring unknown parameters: max.overlaps</code></pre>
+<pre><code>## Scale on map varies by more than 10%, scale bar may be inaccurate</code></pre>
+<p><img src="plots_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Figures/map.png&quot;</span>, <span class="at">height=</span><span class="dv">6</span>, <span class="at">width=</span><span class="dv">5</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div>
+<pre><code>## Scale on map varies by more than 10%, scale bar may be inaccurate</code></pre>
+</div>
+<div id="boxplots" class="section level2">
+<h2>Boxplots</h2>
+<div id="severity" class="section level3">
+<h3>Severity</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>wb_expl_plot<span class="sc">$</span>active_ingredient <span class="ot">&lt;-</span> <span class="fu">revalue</span>(wb_expl_plot<span class="sc">$</span>active_ingredient, <span class="fu">c</span>(<span class="st">&quot;AACHECK&quot;</span> <span class="ot">=</span> <span class="st">&quot;CHECK&quot;</span>))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:plyr&quot;</span>, <span class="at">unload =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>wb_expl_plot <span class="ot">&lt;-</span> wb_expl_plot  </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>wb_expl_plot<span class="sc">$</span>active_ingredient <span class="ot">&lt;-</span> <span class="fu">factor</span>(wb_expl_plot<span class="sc">$</span>active_ingredient, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;CHECK&quot;</span>, <span class="st">&quot;PYRA+EPOX&quot;</span>, <span class="st">&quot;TFLX+TEBU&quot;</span>, <span class="st">&quot;AZOX+TEBU&quot;</span>, <span class="st">&quot;TEBU&quot;</span>, <span class="st">&quot;TFLX+PROT&quot;</span>, <span class="st">&quot;MANC&quot;</span>))</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>wb_expl_plot1 <span class="ot">=</span> wb_expl_plot <span class="sc">%&gt;%</span> </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">region =</span> <span class="fu">case_when</span>(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    region <span class="sc">==</span> <span class="st">&quot;North&quot;</span> <span class="sc">~</span> <span class="st">&quot;Tropical&quot;</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    region <span class="sc">==</span> <span class="st">&quot;South&quot;</span> <span class="sc">~</span> <span class="st">&quot;Subtropical&quot;</span>))</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>wb_expl_plot2 <span class="ot">=</span> wb_expl_plot1 <span class="sc">%&gt;%</span> </span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(active_ingredient <span class="sc">==</span> <span class="st">&quot;CHECK&quot;</span>) </span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wb_expl_plot2<span class="sc">$</span>index_check)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##   0.000   1.419  11.066  28.716  48.184 100.000       2</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>box_sev <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wb_expl_plot, <span class="fu">aes</span>(active_ingredient, mean_index)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;#008ECC&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>(<span class="at">font_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fungicides&quot;</span>, <span class="at">y =</span> <span class="st">&quot;WB Index (%)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>,<span class="dv">40</span>,<span class="dv">60</span>,<span class="dv">80</span>,<span class="dv">100</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))<span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">size=</span><span class="dv">1</span>),</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.text.y = element_text(size=12),</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>box_region_sev <span class="ot">=</span> wb_expl_plot1 <span class="sc">%&gt;%</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(active_ingredient <span class="sc">==</span> <span class="st">&quot;CHECK&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(region), sev_check)) <span class="sc">+</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;#008ECC&quot;</span>, <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>(<span class="at">font_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;WB Index (%) in the CHECK&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>,<span class="dv">40</span>,<span class="dv">60</span>,<span class="dv">80</span>,<span class="dv">100</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))<span class="sc">+</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.text.y = element_text(size=12),</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.title.y = element_text(size=14, face = &quot;bold&quot;)</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>sev_year <span class="ot">&lt;-</span> wb_expl_plot <span class="sc">%&gt;%</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(active_ingredient <span class="sc">==</span> <span class="st">&quot;CHECK&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(year), index_check)) <span class="sc">+</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;#008ECC&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>(<span class="at">font_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>,<span class="dv">40</span>,<span class="dv">60</span>,<span class="dv">80</span>,<span class="dv">100</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>))<span class="sc">+</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.text.y = element_text(size=12),</span></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.title.y = element_text(size=14, face = &quot;bold&quot;)</span></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+</div>
+<div id="yield" class="section level3">
+<h3>Yield</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>wb_expl_plot<span class="sc">$</span>active_ingredient <span class="ot">&lt;-</span> <span class="fu">revalue</span>(wb_expl_plot<span class="sc">$</span>active_ingredient, <span class="fu">c</span>(<span class="st">&quot;AACHECK&quot;</span> <span class="ot">=</span> <span class="st">&quot;CHECK&quot;</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:plyr&quot;</span>, <span class="at">unload =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>wb_expl_plot <span class="ot">&lt;-</span> wb_expl_plot  </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>wb_expl_plot<span class="sc">$</span>active_ingredient <span class="ot">&lt;-</span> <span class="fu">factor</span>(wb_expl_plot<span class="sc">$</span>active_ingredient, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;CHECK&quot;</span>, <span class="st">&quot;PYRA+EPOX&quot;</span>, <span class="st">&quot;TFLX+TEBU&quot;</span>, <span class="st">&quot;AZOX+TEBU&quot;</span>, <span class="st">&quot;TEBU&quot;</span>, <span class="st">&quot;TFLX+PROT&quot;</span>, <span class="st">&quot;MANC&quot;</span>))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>wb_expl_plot1 <span class="ot">=</span> wb_expl_plot <span class="sc">%&gt;%</span> </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">region =</span> <span class="fu">case_when</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    region <span class="sc">==</span> <span class="st">&quot;North&quot;</span> <span class="sc">~</span> <span class="st">&quot;Tropical&quot;</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    region <span class="sc">==</span> <span class="st">&quot;South&quot;</span> <span class="sc">~</span> <span class="st">&quot;Subtropical&quot;</span>))</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>box_yld <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wb_expl_plot, <span class="fu">aes</span>(active_ingredient, mean_yld)) <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;#FF950E&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>(<span class="at">font_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fungicides&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Yield (kg/ha)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">2000</span>,<span class="dv">3000</span>,<span class="dv">4000</span>,<span class="dv">5000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5000</span>))<span class="sc">+</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>box_region_yld <span class="ot">=</span> wb_expl_plot1 <span class="sc">%&gt;%</span> </span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(active_ingredient <span class="sc">==</span> <span class="st">&quot;CHECK&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(region), yld_check)) <span class="sc">+</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;gray85&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;#FF950E&quot;</span>, <span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>(<span class="at">font_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Region&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Yield (kg/ha) in the CHECK&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">2000</span>,<span class="dv">3000</span>,<span class="dv">4000</span>,<span class="dv">5000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5000</span>))<span class="sc">+</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;gray60&quot;</span>, <span class="at">size=</span><span class="dv">1</span>)</span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.text.y = element_text(size=12),</span></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.title = element_text(size=14, face = &quot;bold&quot;)</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>yld_year <span class="ot">&lt;-</span> wb_expl_plot <span class="sc">%&gt;%</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(active_ingredient <span class="sc">==</span> <span class="st">&quot;CHECK&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(year), yld_check)) <span class="sc">+</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;#FF950E&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_hgrid</span>(<span class="at">font_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Crop Seasons&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">2000</span>,<span class="dv">3000</span>,<span class="dv">4000</span>,<span class="dv">5000</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5000</span>))<span class="sc">+</span></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># axis.text.y = element_text(size=12),</span></span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>)</span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;patchwork&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:cowplot&#39;:
+## 
+##     align_plots</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>box_sev <span class="sc">+</span> box_region_sev <span class="sc">+</span> sev_year <span class="sc">+</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  box_yld<span class="sc">+</span> box_region_yld <span class="sc">+</span> yld_year <span class="sc">+</span> </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,.<span class="dv">3</span>,.<span class="dv">7</span>))<span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&#39;A&#39;</span>) <span class="sc">&amp;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.border =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="plots_files/figure-html/unnamed-chunk-8-1.png" width="1152" /></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Figures/Combo_BOX.png&quot;</span>, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">8</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="index-x-yield" class="section level2">
+<h2>Index x Yield</h2>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code></pre></div>
+<pre><code>## here() starts at C:/Users/joaoa/OneDrive/Documentos/GitHub/Wheat-blast-Meta-analysis</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>yld <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>,<span class="st">&quot;mv_yld_region.xlsx&quot;</span>)) </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>index <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>,<span class="st">&quot;efficacy_index_region.xlsx&quot;</span>)) </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>gain <span class="ot">=</span> <span class="fu">full_join</span>(index, yld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;fungicide&quot;</span>, <span class="st">&quot;class&quot;</span>))</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>gain <span class="sc">%&gt;%</span> </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">class =</span> <span class="fu">case_when</span>(</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    class <span class="sc">==</span> <span class="st">&quot;North&quot;</span> <span class="sc">~</span> <span class="st">&quot;Tropical&quot;</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    class <span class="sc">==</span> <span class="st">&quot;South&quot;</span> <span class="sc">~</span> <span class="st">&quot;Subtropical&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">fungicide =</span> <span class="fu">factor</span>(fungicide, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;MANC&quot;</span>, <span class="st">&quot;AZOX+TEBU&quot;</span>, <span class="st">&quot;TFLX+PROT&quot;</span>, <span class="st">&quot;TEBU&quot;</span>,  <span class="st">&quot;TFLX+TEBU&quot;</span>,  <span class="st">&quot;PYRA+EPOX&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(mean_eff, mean_yld)) <span class="sc">+</span> </span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower_yld, <span class="at">ymax =</span> upper_yld, <span class="at">color =</span> fungicide), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">width=</span><span class="dv">0</span>, <span class="at">size=</span> <span class="fl">0.8</span>)<span class="sc">+</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> lower_eff, <span class="at">xmax =</span> upper_eff, <span class="at">color =</span> fungicide), <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">height=</span> <span class="dv">0</span>, <span class="at">size=</span> <span class="fl">0.8</span>)<span class="sc">+</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(mean_eff, mean_yld, <span class="at">color =</span> fungicide), <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_y_continuous(breaks=c(100, 200, 300, 400,500,600,700,800), limits=c(100,800))+</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#scale_x_continuous(breaks=c(30,40,50,60,70), limits=c(30,70))+</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal_grid</span>()<span class="sc">+</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_colorblind</span>()<span class="sc">+</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Yield return (kg/ha)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Efficacy (%)&quot;</span>, <span class="at">color =</span> <span class="st">&quot;Fungicide&quot;</span>)<span class="sc">+</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), </span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title.align =</span> <span class="fl">0.5</span>,</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>))<span class="sc">+</span></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>class)</span></code></pre></div>
+<p><img src="plots_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;Figures/index_yld_region.png&quot;</span>, <span class="at">dpi =</span> <span class="dv">600</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">width=</span><span class="dv">10</span>)</span></code></pre></div>
+</div>
+
+
+
+Copyright 2017 Emerson Del Ponte
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
