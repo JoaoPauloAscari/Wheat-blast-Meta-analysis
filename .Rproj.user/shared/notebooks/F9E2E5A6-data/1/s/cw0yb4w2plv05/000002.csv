@@ -1,0 +1,5 @@
+"0","#By active ingredient"
+"0","fung = wb_data %>% "
+"0","  tabyl(active_ingredient) %>% "
+"0","  filter(n>5) "
+"0","fung"

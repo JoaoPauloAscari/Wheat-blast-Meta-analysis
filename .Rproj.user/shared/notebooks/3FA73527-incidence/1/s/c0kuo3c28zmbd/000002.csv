@@ -1,0 +1,8 @@
+"0","library(tidyverse)"
+"0","library(metafor)"
+"0","library(janitor)"
+"0","library(readr)"
+"0","library(here)"
+"2","package ‘here’ was built under R version 3.6.1"
+"2","here() starts at C:/Users/joaoa/Google Drive/1. Doctorat in Plant Pathology - UFV/0. Documents doctorat/2. Joao-Ascari/WB-Meta-analysis/R-codes_Jhonatan
+"

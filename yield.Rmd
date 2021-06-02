@@ -1,0 +1,490 @@
+
+
+
+
+```{r, warning=FALSE}
+library(tidyverse)
+library(metafor)
+library(janitor)
+library(here)
+wb_yld <- read_csv("data/dat_yld.csv")
+wb_yld
+```
+
+
+## Absolute yld 
+
+```{r}
+
+library(metafor)
+
+mv_yld <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient,
+  random = list(~active_ingredient | study),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+summary(mv_yld)
+```
+
+
+```{r}
+yield_res<- data.frame(cbind(mv_yld$b, 
+                             mv_yld$ci.lb,
+                             mv_yld$ci.ub)) %>% 
+  mutate(fungicide = c("check", "AZOX+TEBU", "MANC", "PYRA+EPOX", "TEBU","TFLX+PROT", "TFLX+TEBU")) %>% 
+  filter(fungicide != "check")
+
+
+names (yield_res) = c("yld", "yld_lower", "yld_upper", "fungicide")
+  
+yield_res
+
+
+openxlsx::write.xlsx(yield_res, here("data","yld_kg.xlsx"), colNames = TRUE)
+```
+
+
+
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+anova(mv_yld, L = rbind(
+c(0, 1,-1, 0, 0, 0, 0),
+  c(0, 1, 0,-1, 0, 0, 0),
+  c(0, 1, 0, 0,-1, 0, 0),
+  c(0, 1, 0, 0, 0,-1, 0),
+  c(0, 1, 0, 0, 0, 0,-1),
+  c(0, 0, 1,-1, 0, 0, 0),
+  c(0, 0, 1, 0,-1, 0, 0),
+  c(0, 0, 1, 0, 0,-1, 0),
+  c(0, 0, 1, 0, 0, 0,-1),
+  c(0, 0, 0, 1,-1, 0, 0),
+  c(0, 0, 0, 1, 0,-1, 0),
+  c(0, 0, 0, 1, 0, 0,-1),
+  c(0, 0, 0, 0, 1,-1, 0),
+  c(0, 0, 0, 0, 1, 0,-1),
+  c(0, 0, 0, 0, 0, 1,-1)))
+```
+
+
+## Relative yld
+
+```{r}
+
+# Sampling variance for log of the mean (Paul et al., 2008) to use in multivariate model
+wb_yld = wb_yld %>% 
+  mutate(log_yld = log(mean_yld))
+
+wb_yld$log_var_yld <- with(wb_yld, vi_yld / (n * mean_yld^2))
+
+
+mv_yld_relative <- rma.mv(log_yld, log_var_yld,
+  mods = ~active_ingredient,
+  random = list(~active_ingredient | study),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+summary(mv_yld_relative)
+```
+
+
+
+```{r}
+results_relative_yld<- data.frame(cbind((exp(mv_yld_relative$b)-1)*100, 
+                             (exp(mv_yld_relative$ci.lb)-1)*100,
+                             (exp(mv_yld_relative$ci.ub)-1)*100)) %>% 
+ mutate(fungicide = c("check", "AZOX+TEBU", "MANC", "PYRA+EPOX", "TEBU","TFLX+PROT", "TFLX+TEBU")) %>% 
+  filter(fungicide != "check")
+
+names (results_relative_yld) = c("yld", "yld_lower", "yld_upper", "fungicide")
+
+results_relative_yld
+
+openxlsx::write.xlsx(results_relative_yld, here("data","yld_relative.xlsx"), colNames = TRUE)
+```
+
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+anova(mv_yld_relative, L = rbind(
+  c(0, 1,-1, 0, 0, 0, 0),
+  c(0, 1, 0,-1, 0, 0, 0),
+  c(0, 1, 0, 0,-1, 0, 0),
+  c(0, 1, 0, 0, 0,-1, 0),
+  c(0, 1, 0, 0, 0, 0,-1),
+  c(0, 0, 1,-1, 0, 0, 0),
+  c(0, 0, 1, 0,-1, 0, 0),
+  c(0, 0, 1, 0, 0,-1, 0),
+  c(0, 0, 1, 0, 0, 0,-1),
+  c(0, 0, 0, 1,-1, 0, 0),
+  c(0, 0, 0, 1, 0,-1, 0),
+  c(0, 0, 0, 1, 0, 0,-1),
+  c(0, 0, 0, 0, 1,-1, 0),
+  c(0, 0, 0, 0, 1, 0,-1),
+  c(0, 0, 0, 0, 0, 1,-1)))
+```
+
+
+### Mods: yield_class
+
+```{r}
+
+
+summary(wb_yld$yld_check) # Median = 1200
+
+wb_yld <- wb_yld %>%
+  mutate(yld_check_class = case_when(
+      yld_check < 1200 ~ "low",
+      yld_check >= 1200 ~ "high"))
+table(wb_yld$active_ingredient, wb_yld$yld_check_class)
+
+
+mv_yld_check <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * factor(yld_check_class),
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+
+mv_yld_check
+
+
+anova(mv_yld_check, btt=9:14)
+
+
+```
+
+
+### Mods: region
+
+```{r}
+
+library(metafor)
+
+
+mv_yld_region <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * as.factor(region),
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+
+mv_yld_region
+
+anova(mv_yld_region, btt = 9:14)
+
+
+```
+
+
+
+```{r}
+dat1 = data.frame(mv_yld_region$beta, mv_yld_region$ci.lb, mv_yld_region$ci.ub, mv_yld_region$se) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"),sep = "region") %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:12))
+names(dat1) = c("fungicide", "region", "mean_yld", "ci.lb_yld", "ci.ub_yld", "SE_yld","n") 
+
+dat2 = dat1 %>% 
+  filter(n < 7) %>% 
+  mutate(region = rep("Tropical", length(fungicide)))
+
+dat3 = dat1 %>% 
+  filter(n > 6) %>% 
+  mutate(region = rep("Subtropical", length(fungicide)))
+
+dat4 = rbind(dat2,dat3) %>% 
+  select(-"n")
+
+
+openxlsx::write.xlsx(dat4, here("data","yld_SE_region.xlsx"), colNames = TRUE)
+
+
+```
+
+
+```{r}
+eff_log = read_excel("data/eff_log_region.xlsx")
+yld_reg <- read_excel("data/yld_SE_region.xlsx")
+
+data_simulation = full_join(eff_log, yld_reg, by = c("fungicide", "region"))
+openxlsx::write.xlsx(data_simulation, here("data","data_simulation.xlsx"), colNames = TRUE)
+
+```
+
+
+#### Mod effect
+
+```{r}
+reg1 = data.frame(mv_yld_region$beta, mv_yld_region$ci.lb, mv_yld_region$ci.ub) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"), sep = "ind_check_class") %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:12))
+names(reg1) = c("fungicide", "class", "mean", "ci.lb", "ci.ub", "n") 
+
+reg2 = reg1 %>% 
+  filter(n < 7) %>% 
+  mutate(class = rep("North", 6))
+
+reg3 = reg1 %>% 
+  filter(n > 6) %>% 
+  mutate(class = rep("South", 6))
+
+reg4 = rbind(reg2,reg3)  
+
+mean = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1:3) %>% 
+  spread(class, mean) %>% 
+  mutate(mean = North + South) %>% 
+  select(1,4)
+
+lower = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,4) %>% 
+  spread(class, ci.lb) %>% 
+  mutate(lower = North + South) %>%  
+  select(1,4)
+
+upper = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,5) %>% 
+  spread(class, ci.ub) %>% 
+  mutate(upper = North + South) %>% 
+  select(1,4)
+
+reg5 = left_join(mean, lower, by= c("fungicide")) %>% 
+  left_join(upper, by = c("fungicide")) %>% 
+  mutate(class = rep("South", length("fungicide"))) %>% 
+  select("fungicide", "class", "mean", "lower", "upper")
+
+
+High = reg4 %>% 
+  filter(class == "North") %>% 
+  select(1:5)
+names(High) = c("fungicide", "class", "mean", "lower", "upper") 
+
+reg6 = full_join(High,reg5)
+names(reg6) = c("fungicide", "class", "mean_yld", "lower_yld", "upper_yld")
+reg6
+
+
+openxlsx::write.xlsx(reg6, here("data","mv_yld_region.xlsx"), colNames = TRUE)
+```
+
+### Mods: Year as continuous
+
+```{r}
+
+mv_yld_year <- rma.mv(mean_yld, vi_yld,
+   mods = ~active_ingredient*year,
+   random = list(~active_ingredient | factor(study)),
+   struct = "UN",
+   method = "ML",
+   control = list(optimizer = "nlm"),
+   data = wb_yld %>% mutate(year= year - 2012))
+
+ mv_yld_year
+
+
+anova(mv_yld_year, btt = 9:14)
+```
+
+### Disease Pressure
+
+```{r}
+
+
+library(tidyverse)
+
+summary(wb_yld$index_check) # Median = 10
+
+wb_yld <- wb_yld %>%
+  mutate(
+    ind_check_class = case_when(
+      index_check < 10 ~ "Low",
+      index_check >= 10 ~ "High"))
+
+library(janitor) 
+wb_yld %>%
+  tabyl(active_ingredient, ind_check_class)
+
+mv_yld_bas <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * ind_check_class,
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld)
+
+
+mv_yld_bas
+
+anova(mv_yld_bas, btt = 9:14)
+```
+
+
+## Inconsistency
+
+```{r, warning=FALSE}
+library(tidyverse)
+library(metafor)
+library(janitor)
+library(here)
+wb_yld <- read_csv("data/dat_yld.csv") %>% 
+  group_by(study, year, location, state) %>%
+  mutate(n2 = n()) %>% 
+  filter(n2 != 1)
+wb_yld
+
+
+wb_yld1 = wb_yld %>% 
+  group_by(study) %>% 
+  summarise(active_ingredient1=paste(active_ingredient, collapse=';')) 
+
+wb_yld1 %>% 
+  tabyl(active_ingredient1)
+
+```
+
+### Design groups
+
+Eight different designs (here design refers to the set of treatments in the trial) were found in the trials reporting wheat grain yield.
+
+```{r}
+design1 = wb_yld %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "MANC", "PYRA+EPOX","TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(1, length(active_ingredient))) %>% 
+  filter(n2 == 7) %>% 
+  filter(n3 == 7)
+design1
+
+design2 = wb_yld %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "PYRA+EPOX", "TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(2, length(active_ingredient))) %>% 
+  filter(n2 == 6) %>% 
+  filter(n3 == 6)
+design2
+
+design3 = wb_yld %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "MANC", "TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(3, length(active_ingredient))) %>% 
+  filter(n2 == 6) %>% 
+  filter(n3 == 6)
+design3
+
+design4 = wb_yld %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "MANC", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(4, length(active_ingredient))) %>% 
+  filter(n2 == 5) %>% 
+  filter(n3 == 5)
+design4
+
+design5 = wb_yld %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "MANC", "PYRA+EPOX", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(5, length(active_ingredient))) %>% 
+  filter(n2 == 5) %>% 
+  filter(n3 == 5)
+design5
+
+design6 = wb_yld %>% 
+group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "MANC", "TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(6, length(active_ingredient))) %>% 
+  filter(n2 == 5) %>% 
+  filter(n3 == 5)
+design6
+
+design7 = wb_yld %>% 
+group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "MANC", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(7, length(active_ingredient))) %>% 
+  filter(n2 == 4) %>% 
+  filter(n3 == 4)
+design7
+
+design8 = wb_yld %>% 
+group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(8, length(active_ingredient))) %>% 
+  filter(n2 == 3) %>% 
+  filter(n3 == 3)
+design8
+
+wb_yld_design = rbind(design1, design2, design3, design4, design5, design6, design7, design8)
+
+
+wb_yld_design %>% 
+  group_by(study,design) %>% 
+  summarize() %>% 
+  tabyl(design)
+```
+
+
+### Test 
+
+We used a factorial-type ANOVA model to determine the significance of the *treatment x design* interaction, evaluated based on the Wald test statistic.
+
+```{r}
+library(metafor)
+
+mv_design <- rma.mv(mean_yld, vi_yld,
+  mods = ~ active_ingredient*design,
+  random = list(~ 1 | study / design / active_ingredient),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld_design
+)
+
+
+mv_design
+
+
+anova(mv_design, btt = 9:14)
+```
+

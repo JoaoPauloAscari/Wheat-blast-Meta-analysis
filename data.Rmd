@@ -1,0 +1,345 @@
+
+
+
+
+```{r include=FALSE}
+library(tidyverse)
+library(metafor)
+library(ggthemes)
+library(cowplot)
+library(scales)
+library(knitr)
+library(broom)
+library(dplyr)
+library(readxl)
+library(gsheet)
+library(janitor)
+library(magrittr)
+library(gsheet)
+library(janitor) 
+library(readr)
+```
+
+
+## Import data
+
+```{r}
+
+wb_raw = gsheet2tbl("https://docs.google.com/spreadsheets/d/1vvAbRlidw2XklqoLd-3k8NqYWLTE4Okq0ZWghv_jFXs/edit?usp=sharing") %>% 
+  group_by(study, brand_name) %>% 
+  mutate(index = (inc*sev)/100) %>%
+  mutate(n = n())      #columm with the number of rep
+wb_raw
+```
+
+
+## Getting mean and study variance for each dependent variable
+
+```{r, warning=FALSE}
+
+wb1 <- wb_raw %>% 
+  group_by(study, year, location, state, cultivar, data_sowing, brand_name, group, active_ingredient, n) %>% 
+  summarise(mean_sev = mean(sev),
+            mean_inc = mean(inc),
+            mean_yld = mean(yld),
+            mean_index = mean(index))
+
+wb2_index <- wb_raw %>%
+  filter(index != "NA") %>% 
+  group_by(study, year) %>%  
+  dplyr::select(active_ingredient, block, index) %>%
+  group_by(study, year) %>% 
+  do(tidy(aov(.$index ~ .$active_ingredient + factor(.$block)))) %>% 
+  filter(term == "Residuals") %>% 
+  dplyr::select(1,2,6)
+names(wb2_index)[1] <- "study"
+names(wb2_index)[2] <- "year"
+names(wb2_index)[3] <- "v_index"
+
+wb2_sev <- wb_raw %>%
+  filter(sev != "NA") %>% 
+  group_by(study, year) %>%  
+  dplyr::select(active_ingredient, block, sev) %>%
+  group_by(study, year) %>% 
+  do(tidy(aov(.$sev ~ .$active_ingredient + factor(.$block)))) %>% 
+  filter(term == "Residuals") %>% 
+  dplyr::select(1,2,6)
+names(wb2_sev)[1] <- "study"
+names(wb2_sev)[2] <- "year"
+names(wb2_sev)[3] <- "v_sev"
+ 
+wb2_inc <- wb_raw %>% 
+  filter(inc != "NA") %>%
+  group_by(study, year) %>%  
+  dplyr::select(active_ingredient, block, inc) %>%
+  group_by(study, year) %>% 
+  do(tidy(aov(.$inc ~ .$active_ingredient + factor(.$block)))) %>% 
+  filter(term == "Residuals") %>% 
+  dplyr::select(1,2,6)
+names(wb2_inc)[1] <- "study"
+names(wb2_inc)[2] <- "year"
+names(wb2_inc)[3] <- "v_inc"
+
+wb2_yld <- wb_raw %>% 
+  filter(yld != "NA") %>%
+  group_by(study, year) %>%  
+  dplyr::select(active_ingredient, block, yld) %>%
+  group_by(study, year) %>% 
+  do(tidy(aov(.$yld ~ .$active_ingredient + factor(.$block)))) %>% 
+  filter(term == "Residuals") %>% 
+  dplyr::select(1,2,6)
+names(wb2_yld)[1] <- "study"
+names(wb2_yld)[2] <- "year"
+names(wb2_yld)[3] <- "v_yld"
+
+qmr = left_join(wb2_sev, wb2_inc, by = "study")
+qmr1 = left_join(qmr, wb2_yld, by = "study")
+qmr2 = left_join(qmr1, wb2_index, by = "study")
+
+wb_trial = full_join(wb1, qmr2, by = "study") %>% 
+  dplyr::select(-year.x, -year.x.x, -year.y, -year.y.y)
+names(wb_trial)[2] <- "year"
+wb_trial
+```
+
+## Check columns for yld, sev, inc, index
+
+```{r}
+# Getting the check values of each variables (means and variances)
+wb_check = wb_trial %>% 
+  ungroup() %>% 
+  filter(brand_name == "check")  %>% 
+  mutate(check = brand_name, sev_check = mean_sev, v_sev_check = v_sev, inc_check = mean_inc, v_inc_check = v_inc, yld_check = mean_yld, v_yld_check = v_yld, index_check = mean_index, v_index_check = v_index) %>% 
+  dplyr::select(study, yld_check, v_yld_check, sev_check, v_sev_check, inc_check, v_inc_check, index_check, v_index_check)
+
+#Putting the check values to original data.frame
+wb_data = wb_trial %>% 
+  full_join(wb_check)
+wb_data
+```
+
+
+## Exploring the data
+
+```{r}
+#By year
+wb_data %>%
+  tabyl(year)
+```
+
+
+```{r}
+#By location
+wb_data %>%
+  tabyl(location, state)
+
+wb_data %>%
+  tabyl(state)
+ 
+```
+
+
+```{r}
+#By state
+wb_data %>%
+  tabyl(state)
+```
+
+
+```{r}
+#By cultivar
+wb_data %>%
+  tabyl(cultivar)
+```
+
+
+```{r warning=FALSE}
+#Number of study By variable
+test1 = wb_data %>% 
+  filter(mean_sev != "NA") %>% 
+  group_by(study) %>% 
+  summarise() 
+length(unique(test1$study)) 
+
+test2 = wb_data %>% 
+  filter(mean_inc != "NA") %>% 
+  group_by(study) %>% 
+  summarise()
+length(unique(test2$study)) 
+
+test3 = wb_data %>% 
+  filter(mean_index != "NA") %>% 
+  group_by(study) %>% 
+  summarise()
+length(unique(test3$study)) 
+
+test4 = wb_data %>% 
+  filter(mean_yld != "NA") %>% 
+  group_by(study) %>% 
+  summarise()
+length(unique(test4$study)) 
+```
+
+
+```{r}
+#By commercial product
+wb_data %>%
+  tabyl(brand_name)
+```
+
+
+```{r}
+#By active ingredient
+fung = wb_data %>% 
+  tabyl(active_ingredient) %>% 
+  filter(n>15) 
+fung
+```
+
+
+## Selecting fungicides
+
+```{r, warning=FALSE}
+#Select just the fungides used in more than 5 study
+wheat_blast_data <- wb_data %>% 
+  filter(active_ingredient %in% c("check", "azoxystrobin+tebuconazole", "mancozebe","pyraclostrobin+epoxiconazole", "tebuconazole", "trifloxystrobin+protioconazole", "trifloxystrobin+tebuconazole"))
+
+#Observe fungicides by year
+wheat_blast_data %>%
+  tabyl(active_ingredient, year)
+
+
+# Renaming fungicides 
+library(plyr)
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("check" = "AACHECK"))
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("azoxystrobin+tebuconazole" = "AZOX+TEBU"))
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("mancozebe" = "MANC"))
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("pyraclostrobin+epoxiconazole" = "PYRA+EPOX"))
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("tebuconazole" = "TEBU"))
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("trifloxystrobin+protioconazole" = "TFLX+PROT"))
+wheat_blast_data$active_ingredient <- revalue(wheat_blast_data$active_ingredient, c("trifloxystrobin+tebuconazole" = "TFLX+TEBU"))
+detach("package:plyr", unload = TRUE)
+
+
+
+
+wheat_blast_data <- wheat_blast_data %>% 
+mutate(region = case_when(
+    state == "DF" ~ "North",
+    state == "MG" ~ "North",
+    state == "MS" ~ "North",
+    state == "MT" ~ "North",
+    state == "SP" ~ "South",
+    state == "PR" ~ "South")) 
+
+
+wheat_blast_data %>% 
+  group_by(study, location) %>% 
+  summarise() %>% 
+  tabyl(location)
+
+
+
+wheat_blast_data
+write_csv(wheat_blast_data,"data/wheat_blast_data.csv")
+```
+
+
+```{r}
+#By year and active ingredint
+wheat_blast_data %>% 
+  tabyl(region, active_ingredient)
+
+```
+
+
+```{r warning=FALSE}
+#By year and active ingredint
+wheat_blast_data %>% 
+  group_by(study,region) %>% 
+  summarize() %>% 
+  tabyl(region)
+
+```
+
+
+```{r}
+#By year and active ingredint
+wheat_blast_data %>% 
+  tabyl(active_ingredient, year)
+
+```
+
+## Sampling variances
+
+### Index
+
+```{r warning=FALSE}
+#Select just index colums
+index <- wheat_blast_data %>% 
+  filter(mean_index != "NA") %>% 
+  filter(mean_index>0) 
+hist(index$mean_index)
+
+
+# create the log of the index variable
+index = index %>%
+  mutate(log_index = log(mean_index))
+hist(index$log_index)
+
+
+# create the sampling variance for the log of index
+index$vi_index = with(index, v_index / (n * mean_index^2))
+hist(index$vi_index)
+
+
+index = index %>% 
+  group_by(study, year, location, state, cultivar, data_sowing, group, active_ingredient,n, index_check, yld_check, region) %>%
+  summarise(mean_index = mean(mean_index),
+            mean_yld = mean(mean_yld),
+            log_index = mean(log_index),
+            vi_index = mean(vi_index))
+
+length(unique(index$study))
+
+
+write_csv(index,"data/dat_index.csv")
+
+```
+
+
+
+### Yield
+
+```{r warning=FALSE}
+yield <- wheat_blast_data %>% 
+  filter(mean_yld != "NA")
+hist(yield$mean_yld)
+
+# Sampling variance for yield
+yield$vi_yld <- with(yield, v_yld / n) # multivariate approach
+hist(yield$vi_yld)
+
+yield = yield %>% 
+  group_by(study, year, location, state, cultivar, data_sowing,  group, active_ingredient,n, sev_check, inc_check, index_check, yld_check, region) %>%
+  summarise(mean_sev = mean(mean_sev),
+            mean_inc = mean(mean_inc),
+            mean_yld = mean(mean_yld),
+            vi_yld = mean(vi_yld))
+
+#Check the number of studys
+length(unique(yield$study))
+
+a1 = yield %>%
+  group_by(study, region) %>% 
+  summarise() %>%
+  tabyl(region)
+a1
+
+write_csv(yield, "data/dat_yld.csv")
+
+
+```
+
+
+

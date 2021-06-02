@@ -1,0 +1,6 @@
+"0",""
+"0",""
+"0","# create the log of the sev variable"
+"0","severity = severity %>%"
+"0","  mutate(log_sev = log(mean_sev))"
+"0","hist(severity$log_sev)"

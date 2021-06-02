@@ -1,0 +1,4 @@
+"0",""
+"0",""
+"0","#write_csv(yield_res, ""data/yld_kg.csv"")"
+"0","openxlsx::write.xlsx(yield_res, here(""data"",""yld_kg.xlsx""), colNames = TRUE)"

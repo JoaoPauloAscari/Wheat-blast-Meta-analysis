@@ -1,0 +1,24 @@
+"0",""
+"0","wb_severity <- read_csv(""data/dat_sev.csv"")"
+"2","Parsed with column specification:
+cols(
+  study = [32mcol_double()[39m,
+  year = [32mcol_double()[39m,
+  location = [31mcol_character()[39m,
+  state = [31mcol_character()[39m,
+  cultivar = [31mcol_character()[39m,
+  data_sowing = [31mcol_character()[39m,
+  brand_name = [31mcol_character()[39m,
+  group = [31mcol_character()[39m,
+  active_ingredient = [31mcol_character()[39m,
+  n = [32mcol_double()[39m,
+  sev_check = [32mcol_double()[39m,
+  yld_check = [32mcol_double()[39m,
+  region = [31mcol_character()[39m,
+  mean_sev = [32mcol_double()[39m,
+  mean_yld = [32mcol_double()[39m,
+  log_sev = [32mcol_double()[39m,
+  vi_sev = [32mcol_double()[39m
+)
+"
+"0","wb_severity"

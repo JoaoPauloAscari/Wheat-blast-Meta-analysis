@@ -1,0 +1,6 @@
+"0","#wb_raw <- read_excel(""data/ensaios_cooperativos_BRUSONE.xlsx"") %>% "
+"0","wb_raw = gsheet2tbl(""https://docs.google.com/spreadsheets/d/1vvAbRlidw2XklqoLd-3k8NqYWLTE4Okq0ZWghv_jFXs/edit?usp=sharing"") %>% "
+"0","  group_by(study, brand_name) %>% "
+"0","  mutate(index = (inc*sev)/100) %>%"
+"0","  mutate(n = n())      #columm with the number of rep"
+"0","wb_raw"

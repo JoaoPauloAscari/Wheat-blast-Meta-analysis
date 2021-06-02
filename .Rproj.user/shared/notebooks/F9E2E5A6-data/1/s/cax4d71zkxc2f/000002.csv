@@ -1,0 +1,3 @@
+"0","yield <- wheat_blast_data %>% "
+"0","  filter(mean_yld != ""NA"")"
+"0","hist(yield$mean_yld)"

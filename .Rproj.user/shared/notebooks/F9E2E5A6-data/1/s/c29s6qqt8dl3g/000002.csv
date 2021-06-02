@@ -1,0 +1,4 @@
+"0","incidence <- wheat_blast_data %>% "
+"0","  filter(mean_inc != ""NA"") %>% "
+"0","  filter(mean_inc>0) "
+"0","hist(incidence$mean_inc)"

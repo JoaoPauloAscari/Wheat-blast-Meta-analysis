@@ -1,0 +1,5 @@
+"0",""
+"0",""
+"0","# create the sampling variance for the log of sev"
+"0","index$vi_index = with(index, v_index / (n * mean_index^2))"
+"0","hist(index$vi_index)"

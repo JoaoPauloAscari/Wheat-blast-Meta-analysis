@@ -1,0 +1,4 @@
+"0",""
+"0",""
+"0","#write_csv(efficacy_sev, ""data/efficacy_sev.csv"")"
+"0","openxlsx::write.xlsx(efficacy_sev, here(""data"",""efficacy_sev.xlsx""), colNames = TRUE)"

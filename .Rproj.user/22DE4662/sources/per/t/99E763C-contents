@@ -1,0 +1,224 @@
+% Code
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+#Pachages
+```{r}
+library(tidyverse)
+library(metafor)
+library(janitor)
+library(readr)
+library(here)
+```
+
+#WB_incidence data
+```{r}
+
+wb_incidence <- read_csv("data/dat_inc.csv")
+wb_incidence 
+```
+
+#covariance structure
+```{r}
+
+mv_inc_HCS = rma.mv(log_inc, vi_inc,
+  mods = ~ active_ingredient,
+  random = list(~ active_ingredient | factor(study)),
+  struct = "HCS",
+  method = "ML",
+  data = wb_incidence %>% 
+  filter(vi_inc > 0.000000000001)
+)
+
+
+mv_inc_HCS
+```
+
+## Percent control
+```{r}
+#Calcule the efficacy of each fungicide
+efficacy_incidence <- data.frame(cbind(
+  (1 - exp(mv_inc_HCS$b)) * 100,
+  (1 - exp(mv_inc_HCS$ci.lb)) * 100,
+  (1 - exp(mv_inc_HCS$ci.ub)) * 100))
+
+#Organize the data.frame
+efficacy_inc = efficacy_incidence
+  names (efficacy_inc) = c("efficacy", "efficacy_up", "efficacy_lw")
+  
+efficacy_inc = efficacy_inc %>% 
+  mutate(fungicide = c("check", "AZOX+TEBU", "AZOX+TEBU+MANC","MANC", "PYRA+EPOX", "PYRA+EPOX+MANC", "TEBU","TFLX+PROT", "TFLX+PROT+MANC", "TFLX+TEBU", "TMET+MANC")) %>% 
+  filter(fungicide != "check") %>% 
+  dplyr::select(fungicide, efficacy, efficacy_lw, efficacy_up)
+efficacy_inc
+
+
+#write_csv(efficacy_inc, "data/efficacy_inc.csv")
+openxlsx::write.xlsx(efficacy_inc, here("data","efficacy_inc.xlsx"), colNames = TRUE)
+```
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+#Fit the linear contrasts between the fungicides and get the P-values by 'anova' function
+anova(mv_inc_HCS, L = rbind(
+  c(0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1)))
+```
+
+
+## Mod: YEAR
+
+```{r}
+#Fit the model with YEAR as a mod varible
+wb_inc1 <- wb_incidence %>%
+  filter(mean_inc > 0) %>% 
+  filter(vi_inc > 0.001)
+
+mv_inc_year <- rma.mv(log_inc, vi_inc,
+   mods = ~active_ingredient*year,
+   random = list(~active_ingredient | factor(study)),
+   struct = "HCS",
+   method = "ML",
+  #control = list(optimizer = "nlm"),
+   data = wb_inc1  %>% mutate(year= year - 2012))
+mv_inc_year
+
+anova(mv_inc_year, btt = 13:22) #Colocar o numero de linha da interação
+```
+
+Não houve redução de eficacia a longo dos anos
+
+
+## Mod: region
+```{r}
+mv_inc_region <- rma.mv(log_inc, vi_inc,
+ #mods = ~interaction(active_ingred,region,  year),
+  mods = ~ active_ingredient*region,
+  random = list(~active_ingredient | factor(study)),
+  struct = "HCS",
+  method = "ML",
+  #control = list(optimizer = "nlm"),
+  data = wb_incidence %>% 
+  filter(vi_inc > 0.000000000001)
+)
+
+
+mv_inc_region
+
+
+anova(mv_inc_region, btt = 13:22) 
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+"0",""
+"0","# Sampling variance for yield"
+"0","yield$vi_yld <- with(yield, v_yld / n) # multivariate approach"
+"0","hist(yield$vi_yld)"

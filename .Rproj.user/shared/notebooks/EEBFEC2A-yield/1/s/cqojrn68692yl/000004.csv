@@ -1,0 +1,3 @@
+"0",""
+"0","#write_csv(reg6, ""data/efficacy_sev_region.csv"")"
+"0","openxlsx::write.xlsx(reg6, here(""data"",""yld_bas_inc.xlsx""), colNames = TRUE)"

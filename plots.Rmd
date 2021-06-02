@@ -1,0 +1,342 @@
+
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggthemes)
+library(cowplot)
+library(gsheet)
+
+
+
+```
+
+
+```{r}
+wb_expl_plot = read.csv("data/wheat_blast_data.csv")
+
+#Filter data for means observations of each variable
+wb_expl_plot = wb_expl_plot %>% 
+  dplyr::select(study, year, location, state, region, brand_name, active_ingredient, mean_sev, mean_inc, mean_yld, mean_index, sev_check, inc_check, index_check, yld_check) 
+
+wb_expl_plot
+
+```
+
+## Histogramas
+
+```{r fig.height=8, fig.width=5, warning=FALSE}
+## Log of the Effect-sizes
+wb_expl_plot <- wb_expl_plot %>%
+  mutate(
+    log_index = log(mean_index),
+    log_yld = log(mean_yld))
+
+
+hist_log_index <- ggplot(wb_expl_plot, aes(log_index)) + 
+  geom_histogram(bin = 10, fill = "steelblue", color = "white") + 
+  theme_minimal_hgrid() + 
+  xlab("log(WB index)")
+
+
+hist_index <- ggplot(wb_expl_plot, aes(mean_index)) + 
+  geom_histogram(bin = 10, fill = "steelblue", color = "white") + 
+  theme_minimal_hgrid() +
+  xlab("WB index (%)")
+
+
+
+hist_yld <- ggplot(wb_expl_plot, aes(mean_yld)) + 
+  geom_histogram(bin = 10,fill = "steelblue", color = "white") + 
+  theme_minimal_hgrid() +
+  xlab("Yield (Kg/ha)")
+
+
+library(cowplot)
+hist_plot <- plot_grid(hist_index, hist_log_index, hist_yld, labels = c("A", "B", "C"), nrow = 3, align = "V")
+hist_plot
+
+
+ggsave("Figures/histograms.png", width = 6, height = 9, dpi = 600)
+```
+
+## Map
+
+```{r}
+#Municipalities where trials were carried out.
+library(rnaturalearth)
+library(rnaturalearthhires)
+library(maps)
+library(ggmap)
+library(scales)
+library(ggspatial) 
+library(readxl)
+library(ggrepel)
+library(cowplot)
+
+map = read_excel("data/maps.xlsx")
+
+BRA = ne_states(
+  country = "Brazil",
+  returnclass = "sf"
+)
+
+
+
+states <- filter(BRA, 
+                 name_pt == "Paraná"|
+                 name_pt == "São Paulo"|
+                 name_pt == "Mato Grosso"|
+                 name_pt == "Mato Grosso do Sul"|
+                 name_pt == "Goiás"|
+                 name_pt == "Minas Gerais"|
+                 name_pt == "Distrito Federal")
+
+states = states %>% 
+  mutate(id = case_when(
+    name_pt == "Paraná" ~ "PR",
+    name_pt == "São Paulo" ~ "SP",
+    name_pt == "Mato Grosso" ~ "MT",
+    name_pt == "Mato Grosso do Sul" ~ "MS",
+    name_pt == "Goiás" ~ "GO",
+    name_pt == "Minas Gerais" ~ "MG",
+    name_pt == "Distrito Federal" ~ "DF"))
+
+SUL = ne_states(
+  country = c("Argentina", "Uruguay", "Paraguay", "Colombia", "Bolivia"),
+  returnclass = "sf")
+br_sf <- ne_states(geounit = "brazil",
+                   returnclass = "sf")
+
+```
+
+
+```{r fig.height=8, fig.width=6}
+map %>% 
+ggplot()+
+  geom_sf(data = SUL, fill = "gray95", color = "gray95") +
+  geom_sf(data = BRA, fill = "gray98", color= "gray60", size =0.2) +
+  geom_sf(data = states, aes(x = longitude, y = latitude), fill = "white", color = "gray40", size = 0.2) +
+  geom_text(data = states, aes(x = longitude, y = latitude,  label = id), size = 3, hjust = 0.8, color = "black", fontface = "bold")+
+  geom_jitter(data = map, aes(as.numeric(lon), as.numeric(lat), size = n_trials, color = region), alpha = 0.8) +
+  geom_text_repel(data = map, aes (x = as.numeric(lon), y = as.numeric(lat), label = n_trials), size = 3, box.padding = 0.7, min.segment.length = 0.2, segment.alpha = 1, seed = F, max.overlaps = Inf)+
+  labs(x = "Longitude", y = "Latitude", color = "Region", size = "Number of Trials") +
+  scale_size_continuous(range = c(1,5), breaks = c(1,5,12))+
+  #theme_bw()+
+  theme_minimal_grid()+
+  annotation_scale(location = "bl", width_hint = 0.2) +
+  coord_sf(xlim = c(-65,-40), ylim = c(-32, -9), expand = FALSE)+
+  scale_color_calc()+
+  theme(legend.position = "top",
+        legend.justification = "center",
+        legend.title.align = 0.5,
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10),
+        axis.text.x =  element_text(size = 9),
+        axis.text.y = element_text(size = 9),
+        axis.title.x = element_text(size=10, face = "bold"),
+        axis.title.y = element_text(size=10, face = "bold"),
+        panel.border = element_rect(color = "gray50", size=.2),
+        panel.background = element_rect(fill = "#d2eeff")
+        )+
+  annotation_north_arrow(location = "bl", which_north = "true", pad_x = unit(0.5, "in"), pad_y = unit(0.5, "in"), style = north_arrow_orienteering(fill = c("gray80", "gray96")), height = unit(0.9, "cm"), width = unit(0.8, "cm"))+
+  guides(size=F)
+
+
+
+ggsave("Figures/map.png", height=6, width=5, dpi = 600)
+```
+
+## Boxplots
+
+### Severity
+
+```{r message=FALSE, warning=FALSE}
+
+
+library(plyr)
+wb_expl_plot$active_ingredient <- revalue(wb_expl_plot$active_ingredient, c("AACHECK" = "CHECK"))
+detach("package:plyr", unload = TRUE)
+
+wb_expl_plot <- wb_expl_plot  
+wb_expl_plot$active_ingredient <- factor(wb_expl_plot$active_ingredient, levels = c("CHECK", "PYRA+EPOX", "TFLX+TEBU", "AZOX+TEBU", "TEBU", "TFLX+PROT", "MANC"))
+
+wb_expl_plot1 = wb_expl_plot %>% 
+  mutate(region = case_when(
+    region == "North" ~ "Tropical",
+    region == "South" ~ "Subtropical"))
+
+wb_expl_plot2 = wb_expl_plot1 %>% 
+  filter(active_ingredient == "CHECK") 
+summary(wb_expl_plot2$index_check)
+
+box_sev <- ggplot(wb_expl_plot, aes(active_ingredient, mean_index)) +
+  geom_jitter(width = 0.15, size = 2, color = "gray90", alpha = 1) +
+  geom_boxplot(size = 1, outlier.shape = NA, fill = NA, color = "#008ECC") +
+  theme_minimal_hgrid(font_size = 10)+
+  labs(x = "Fungicides", y = "WB Index (%)") +
+  scale_y_continuous(breaks = c(0,20,40,60,80,100), limits = c(0,100))+
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "gray60", size=1),
+        # axis.text.y = element_text(size=12),
+         axis.title.y = element_text(size=12, face = "bold")
+        )
+
+
+box_region_sev = wb_expl_plot1 %>%
+  filter(active_ingredient == "CHECK") %>%
+  ggplot(aes(factor(region), sev_check)) +
+  geom_jitter(width = 0.15, size = 2, color = "gray90", alpha = 1) +
+  geom_boxplot(size = 1, outlier.shape = NA, fill = NA, color = "#008ECC", width = 0.5) +
+  theme_minimal_hgrid(font_size = 10)+
+  labs(x = "", y = "WB Index (%) in the CHECK") +
+  scale_y_continuous(breaks = c(0,20,40,60,80,100), limits = c(0,100))+
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.y = element_text(size=12, face = "bold"),
+        panel.border = element_rect(color = "gray60", size=1)
+        # axis.text.y = element_text(size=12),
+        # axis.title.y = element_text(size=14, face = "bold")
+        )
+
+
+sev_year <- wb_expl_plot %>%
+  filter(active_ingredient == "CHECK") %>%
+  ggplot(aes(factor(year), index_check)) +
+  geom_jitter(width = 0.15, size = 2, color = "gray90", alpha = 1) +
+  geom_boxplot(size = 1, outlier.shape = NA, fill = NA, color = "#008ECC") +
+  theme_minimal_hgrid(font_size = 10)+
+  labs(x = "", y = "") +
+  scale_y_continuous(breaks = c(0,20,40,60,80,100), limits = c(0,100))+
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        panel.border = element_rect(color = "gray60", size=1)
+        # axis.text.y = element_text(size=12),
+        # axis.title.y = element_text(size=14, face = "bold")
+        )
+
+
+```
+
+
+### Yield
+
+```{r, message=FALSE, warning=FALSE}
+
+library(plyr)
+wb_expl_plot$active_ingredient <- revalue(wb_expl_plot$active_ingredient, c("AACHECK" = "CHECK"))
+detach("package:plyr", unload = TRUE)
+
+wb_expl_plot <- wb_expl_plot  
+wb_expl_plot$active_ingredient <- factor(wb_expl_plot$active_ingredient, levels = c("CHECK", "PYRA+EPOX", "TFLX+TEBU", "AZOX+TEBU", "TEBU", "TFLX+PROT", "MANC"))
+
+wb_expl_plot1 = wb_expl_plot %>% 
+  mutate(region = case_when(
+    region == "North" ~ "Tropical",
+    region == "South" ~ "Subtropical"))
+
+box_yld <- ggplot(wb_expl_plot, aes(active_ingredient, mean_yld)) +
+  geom_jitter(width = 0.15, size = 2, color = "gray90", alpha = 1) +
+  geom_boxplot(size = 1, outlier.shape = NA, fill = NA, color = "#FF950E") +
+  theme_minimal_hgrid(font_size = 10)+
+  labs(x = "Fungicides", y = "Yield (kg/ha)") +
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000,5000), limits = c(0, 5000))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=12),
+        axis.title = element_text(size=12, face = "bold")
+        )
+
+
+box_region_yld = wb_expl_plot1 %>% 
+ filter(active_ingredient == "CHECK") %>%
+  ggplot(aes(factor(region), yld_check)) +
+  geom_jitter(width = 0.15, size = 2, color = "gray85", alpha = 1) +
+  geom_boxplot(size = 1, outlier.shape = NA, fill = NA, color = "#FF950E", width = 0.5) +
+  theme_minimal_hgrid(font_size = 10)+
+  labs(x = "Region", y = "Yield (kg/ha) in the CHECK") +
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000,5000), limits = c(0, 5000))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=12),
+        axis.title.x = element_text(size=12, face = "bold"),
+        axis.title.y = element_text(size=12, face = "bold"),
+        panel.border = element_rect(color = "gray60", size=1)
+        # axis.text.y = element_text(size=12),
+        # axis.title = element_text(size=14, face = "bold")
+         )
+
+
+yld_year <- wb_expl_plot %>%
+  filter(active_ingredient == "CHECK") %>%
+  ggplot(aes(factor(year), yld_check)) +
+  geom_jitter(width = 0.15, size = 2, color = "gray90", alpha = 1) +
+  geom_boxplot(size = 1, outlier.shape = NA, fill = NA, color = "#FF950E") +
+  theme_minimal_hgrid(font_size = 10)+
+  labs(x = "Crop Seasons", y = "") +
+  scale_y_continuous(breaks = c(0,1000,2000,3000,4000,5000), limits = c(0, 5000))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size=12),
+        axis.text.y = element_blank(),
+        # axis.text.y = element_text(size=12),
+        axis.title = element_text(size=12, face = "bold")
+        )
+
+```
+
+
+
+```{r fig.height=10, fig.width=12, warning=FALSE}
+library(patchwork)
+
+
+box_sev + box_region_sev + sev_year + 
+  box_yld+ box_region_yld + yld_year + 
+  plot_layout(heights = c(1, 1),
+              widths = c(1,.3,.7))+
+  plot_annotation(tag_levels = 'A') &
+  theme(panel.border = element_blank())
+
+
+ggsave("Figures/Combo_BOX.png", width = 10, height = 8, dpi = 600)
+```
+
+
+## Index x Yield 
+
+
+```{r}
+library(cowplot)
+library(ggrepel)
+library(tidyverse)
+library(here)
+
+yld = read_excel(here("data","mv_yld_region.xlsx")) 
+index = read_excel(here("data","efficacy_index_region.xlsx")) 
+
+gain = full_join(index, yld, by = c("fungicide", "class"))
+
+gain %>% 
+  mutate(class = case_when(
+    class == "North" ~ "Tropical",
+    class == "South" ~ "Subtropical")) %>% 
+   mutate(fungicide = factor(fungicide, levels = c("MANC", "AZOX+TEBU", "TFLX+PROT", "TEBU",  "TFLX+TEBU",  "PYRA+EPOX"))) %>%
+  ggplot(aes(mean_eff, mean_yld)) + 
+  geom_errorbar(aes(ymin = lower_yld, ymax = upper_yld, color = fungicide), alpha = 0.8, width=0, size= 0.8)+
+  geom_errorbarh(aes(xmin = lower_eff, xmax = upper_eff, color = fungicide), alpha = 0.8, height= 0, size= 0.8)+
+  geom_point(aes(mean_eff, mean_yld, color = fungicide), size = 3)+
+  #scale_y_continuous(breaks=c(100, 200, 300, 400,500,600,700,800), limits=c(100,800))+
+  #scale_x_continuous(breaks=c(30,40,50,60,70), limits=c(30,70))+
+  theme_minimal_grid()+
+  scale_color_colorblind()+
+  labs(y = "Yield return (kg/ha)", x = "Efficacy (%)", color = "Fungicide")+
+  theme(axis.text=element_text(size=12), 
+        axis.title=element_text(size=12, face = "bold"),
+        legend.position = "right",
+        legend.title.align = 0.5,
+        strip.text.x = element_text(size = 14, face = "bold"),
+        legend.title = element_text(size=12, face = "bold"))+
+  facet_grid(~class)
+
+ggsave("Figures/index_yld_region.png", dpi = 600, height=5, width=10)
+
+```
+
+

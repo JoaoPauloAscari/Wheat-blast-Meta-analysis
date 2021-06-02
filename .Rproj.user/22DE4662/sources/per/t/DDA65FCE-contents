@@ -1,0 +1,607 @@
+% Code
+
+# Network model
+
+## Data
+
+```{r, warning=FALSE}
+library(tidyverse)
+library(metafor)
+library(janitor)
+library(here)
+wb_yld <- read_csv("data/dat_yld.csv")
+wb_yld
+```
+
+
+## Absolute yld 
+
+```{r}
+
+library(metafor)
+
+mv_yld <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient,
+  random = list(~active_ingredient | study),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+summary(mv_yld)
+```
+
+
+```{r}
+yield_res<- data.frame(cbind(mv_yld$b, 
+                             mv_yld$ci.lb,
+                             mv_yld$ci.ub)) %>% 
+  mutate(fungicide = c("check", "AZOX+TEBU", "AZOX+TEBU+MANC", "MANC", "PYRA+EPOX", "PYRA+EPOX+MANC", "TEBU","TFLX+PROT", "TFLX+PROT+MANC", "TFLX+TEBU", "TMET+MANC")) %>% 
+  filter(fungicide != "check")
+
+
+names (yield_res) = c("yld", "yld_lower", "yld_upper", "fungicide")
+  
+yield_res
+
+
+#write_csv(yield_res, "data/yld_kg.csv")
+openxlsx::write.xlsx(yield_res, here("data","yld_kg.xlsx"), colNames = TRUE)
+```
+
+
+
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+anova(mv_yld, L = rbind(
+ c(0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1)))
+```
+
+
+## Relative yld
+
+```{r}
+
+# Sampling variance for log of the mean (Paul et al., 2008) to use in multivariate model
+wb_yld = wb_yld %>% 
+  mutate(log_yld = log(mean_yld))
+
+wb_yld$log_var_yld <- with(wb_yld, vi_yld / (n * mean_yld^2))
+
+
+mv_yld_relative <- rma.mv(log_yld, log_var_yld,
+  mods = ~active_ingredient,
+  random = list(~active_ingredient | study),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+summary(mv_yld_relative)
+```
+
+
+
+```{r}
+results_relative_yld<- data.frame(cbind((exp(mv_yld_relative$b)-1)*100, 
+                             (exp(mv_yld_relative$ci.lb)-1)*100,
+                             (exp(mv_yld_relative$ci.ub)-1)*100)) %>% 
+ mutate(fungicide = c("check", "AZOX+TEBU", "AZOX+TEBU+MANC", "MANC", "PYRA+EPOX", "PYRA+EPOX+MANC", "TEBU","TFLX+PROT", "TFLX+PROT+MANC", "TFLX+TEBU", "TMET+MANC")) %>% 
+  filter(fungicide != "check")
+
+names (results_relative_yld) = c("yld", "yld_lower", "yld_upper", "fungicide")
+
+results_relative_yld
+
+openxlsx::write.xlsx(results_relative_yld, here("data","yld_relative.xlsx"), colNames = TRUE)
+```
+
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+anova(mv_yld_relative, L = rbind(
+  c(0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1)))
+```
+
+
+### yield_class
+
+```{r}
+#Moderator yield_class
+
+summary(wb_yld$yld_check) # Median = 1281 
+
+wb_yld <- wb_yld %>%
+  mutate(yld_check_class = case_when(
+      yld_check < 1300 ~ "low",
+      yld_check >= 1300 ~ "high"))
+table(wb_yld$active_ingredient, wb_yld$yld_check_class)
+
+
+mv_yld_check <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * factor(yld_check_class),
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+
+mv_yld_check
+
+
+anova(mv_yld_check, btt=13:22)
+
+
+```
+
+### Mods: region
+
+```{r}
+
+library(metafor)
+
+
+mv_yld_region <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * as.factor(region),
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld
+)
+
+
+mv_yld_region
+
+anova(mv_yld_region, btt = 13:22)
+
+
+```
+
+
+
+### Year as continuous
+
+```{r}
+
+mv_yld_year <- rma.mv(mean_yld, vi_yld,
+   mods = ~active_ingredient*year,
+   random = list(~active_ingredient | factor(study)),
+   struct = "UN",
+   method = "ML",
+   control = list(optimizer = "nlm"),
+   data = wb_yld %>% mutate(year= year - 2012))
+
+ mv_yld_year
+
+
+anova(mv_yld_year, btt = 13:22)
+```
+
+
+
+### Disease Pressure - SEV
+
+
+```{r}
+
+
+library(tidyverse)
+
+summary(wb_yld$sev_check) # Median = 28
+
+wb_yld <- wb_yld %>%
+  mutate(
+    sev_check_class = case_when(
+      sev_check < 30 ~ "Low",
+      sev_check >= 30 ~ "High"))
+
+library(janitor) 
+wb_yld %>%
+  tabyl(active_ingredient, sev_check_class)
+
+mv_yld_bas_sev <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * sev_check_class,
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld)
+
+
+mv_yld_bas_sev
+
+anova(mv_yld_bas_sev, btt = 13:22)
+```
+
+### Mod effect
+
+
+```{r}
+reg1 = data.frame(mv_yld_bas_sev$beta, mv_yld_bas_sev$ci.lb, mv_yld_bas_sev$ci.ub) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"), sep = "sev_check_class") %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:20))
+names(reg1) = c("fungicide", "class", "mean", "ci.lb", "ci.ub", "n") 
+
+reg2 = reg1 %>% 
+  filter(n < 11) %>% 
+  mutate(class = rep("High", 10))
+
+reg3 = reg1 %>% 
+  filter(n > 10) 
+
+reg4 = rbind(reg2,reg3)  
+
+mean = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1:3) %>% 
+  spread(class, mean) %>% 
+  mutate(mean = High + Low) %>% 
+  select(1,4)
+
+lower = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,4) %>% 
+  spread(class, ci.lb) %>% 
+  mutate(lower = High + Low) %>%  
+  select(1,4)
+
+upper = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,5) %>% 
+  spread(class, ci.ub) %>% 
+  mutate(upper = High + Low) %>% 
+  select(1,4)
+
+reg5 = left_join(mean, lower, by= c("fungicide")) %>% 
+  left_join(upper, by = c("fungicide")) %>% 
+  mutate(class = rep("Low", length("fungicide"))) %>% 
+  select("fungicide", "class", "mean", "lower", "upper")
+
+
+High = reg4 %>% 
+  filter(class == "High") %>% 
+  select(1:5)
+names(High) = c("fungicide", "class", "mean", "lower", "upper") 
+
+reg6 = full_join(High,reg5)
+reg6
+
+#write_csv(reg6, "data/efficacy_sev_region.csv")
+openxlsx::write.xlsx(reg6, here("data","yld_bas_sev.xlsx"), colNames = TRUE)
+```
+
+### Disease Pressure - INC
+
+
+```{r}
+
+
+library(tidyverse)
+
+summary(wb_yld$inc_check) # Median = 36
+
+wb_yld <- wb_yld %>%
+  filter(inc_check != "NA") %>% 
+  mutate(
+    inc_check_class = case_when(
+      inc_check < 36 ~ "Low",
+      inc_check >= 36 ~ "High"))
+
+library(janitor) 
+wb_yld %>%
+  tabyl(active_ingredient, inc_check_class)
+
+mv_yld_bas_inc <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * inc_check_class,
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld)
+
+
+mv_yld_bas_inc
+
+anova(mv_yld_bas_inc, btt = 13:22)
+```
+
+### Mod effect
+
+
+
+```{r}
+reg1 = data.frame(mv_yld_bas_inc$beta, mv_yld_bas_inc$ci.lb, mv_yld_bas_inc$ci.ub) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"), sep = "inc_check_class") %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:20))
+names(reg1) = c("fungicide", "class", "mean", "ci.lb", "ci.ub", "n") 
+
+reg2 = reg1 %>% 
+  filter(n < 11) %>% 
+  mutate(class = rep("High", 10))
+
+reg3 = reg1 %>% 
+  filter(n > 10) 
+
+reg4 = rbind(reg2,reg3)  
+
+mean = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1:3) %>% 
+  spread(class, mean) %>% 
+  mutate(mean = High + Low) %>% 
+  select(1,4)
+
+lower = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,4) %>% 
+  spread(class, ci.lb) %>% 
+  mutate(lower = High + Low) %>%  
+  select(1,4)
+
+upper = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,5) %>% 
+  spread(class, ci.ub) %>% 
+  mutate(upper = High + Low) %>% 
+  select(1,4)
+
+reg5 = left_join(mean, lower, by= c("fungicide")) %>% 
+  left_join(upper, by = c("fungicide")) %>% 
+  mutate(class = rep("Low", length("fungicide"))) %>% 
+  select("fungicide", "class", "mean", "lower", "upper")
+
+
+High = reg4 %>% 
+  filter(class == "High") %>% 
+  select(1:5)
+names(High) = c("fungicide", "class", "mean", "lower", "upper") 
+
+reg6 = full_join(High,reg5)
+reg6
+
+#write_csv(reg6, "data/efficacy_sev_region.csv")
+openxlsx::write.xlsx(reg6, here("data","yld_bas_inc.xlsx"), colNames = TRUE)
+```
+
+
+### Disease Pressure - INDEX
+
+
+```{r}
+
+
+library(tidyverse)
+
+summary(wb_yld$index_check) # Median = 10
+
+wb_yld <- wb_yld %>%
+  # filter(active_ingredient != "AZOX+TEBU+MANC" &
+  #        active_ingredient != "PYRA+EPOX+MANC" &
+  #        active_ingredient != "TFLX+PROT+MANC"&
+  #        active_ingredient != "TMET+MANC") %>% 
+  mutate(
+    ind_check_class = case_when(
+      index_check < 10 ~ "Low",
+      index_check >= 10 ~ "High"))
+
+library(janitor) 
+wb_yld %>%
+  tabyl(active_ingredient, ind_check_class)
+
+mv_yld_bas <- rma.mv(mean_yld, vi_yld,
+  mods = ~active_ingredient * ind_check_class,
+  random = list(~active_ingredient | factor(study)),
+  struct = "UN",
+  method = "ML",
+  control = list(optimizer = "nlm"),
+  data = wb_yld)
+
+
+mv_yld_bas
+
+anova(mv_yld_bas, btt = 13:22)
+```
+
+### Mod effect
+
+
+
+```{r}
+reg1 = data.frame(mv_yld_bas$beta, mv_yld_bas$ci.lb, mv_yld_bas$ci.ub) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"), sep = "ind_check_class") %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:20))
+names(reg1) = c("fungicide", "class", "mean", "ci.lb", "ci.ub", "n") 
+
+reg2 = reg1 %>% 
+  filter(n < 11) %>% 
+  mutate(class = rep("High", 10))
+
+reg3 = reg1 %>% 
+  filter(n > 10) 
+
+reg4 = rbind(reg2,reg3)  
+
+mean = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1:3) %>% 
+  spread(class, mean) %>% 
+  mutate(mean = High + Low) %>% 
+  select(1,4)
+
+lower = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,4) %>% 
+  spread(class, ci.lb) %>% 
+  mutate(lower = High + Low) %>%  
+  select(1,4)
+
+upper = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,5) %>% 
+  spread(class, ci.ub) %>% 
+  mutate(upper = High + Low) %>% 
+  select(1,4)
+
+reg5 = left_join(mean, lower, by= c("fungicide")) %>% 
+  left_join(upper, by = c("fungicide")) %>% 
+  mutate(class = rep("Low", length("fungicide"))) %>% 
+  select("fungicide", "class", "mean", "lower", "upper")
+
+
+High = reg4 %>% 
+  filter(class == "High") %>% 
+  select(1:5)
+names(High) = c("fungicide", "class", "mean", "lower", "upper") 
+
+reg6 = full_join(High,reg5)
+reg6
+
+#write_csv(reg6, "data/efficacy_sev_region.csv")
+openxlsx::write.xlsx(reg6, here("data","yld_bas_index.xlsx"), colNames = TRUE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

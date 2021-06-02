@@ -1,0 +1,5 @@
+"0","#Select just severity colums"
+"0","severity <- wheat_blast_data %>% "
+"0","  filter(mean_sev != ""NA"") %>% "
+"0","  filter(mean_sev>0) "
+"0","hist(severity$mean_sev)"

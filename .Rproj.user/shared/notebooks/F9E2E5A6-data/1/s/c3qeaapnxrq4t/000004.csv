@@ -1,0 +1,6 @@
+"0",""
+"0",""
+"0","# create the log of the sev variable"
+"0","index = index %>%"
+"0","  mutate(log_index = log(mean_index))"
+"0","hist(index$log_index)"

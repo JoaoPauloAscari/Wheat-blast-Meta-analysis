@@ -1,0 +1,6 @@
+"0",""
+"0",""
+"0","# create the log of the inc variable"
+"0","incidence = incidence %>%"
+"0","  mutate(log_inc = log(mean_inc))"
+"0","hist(incidence$log_inc)"

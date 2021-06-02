@@ -1,0 +1,245 @@
+% Code
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+#Pachages
+```{r}
+library(tidyverse)
+library(metafor)
+library(janitor)
+library(readr)
+library(here)
+```
+
+# WB_index data
+```{r}
+
+wb_index <- read_csv("data/dat_index.csv")
+wb_index
+
+```
+
+#covariance structure
+```{r}
+
+mv_index <- rma.mv(log_index, vi_index,
+  mods = ~active_ingredient,
+  random = list(~active_ingredient | factor(study)),
+  struct = "HCS",
+  method = "ML",
+  data = wb_index
+)
+
+
+mv_index
+```
+
+## Percent control
+```{r}
+#Calcule the efficacy of each fungicide
+efficacy_index <- data.frame(cbind(
+  (1 - exp(mv_index$b)) * 100,
+  (1 - exp(mv_index$ci.lb)) * 100,
+  (1 - exp(mv_index$ci.ub)) * 100))
+
+#Organize the data.frame
+efficacy_index = efficacy_index
+  names (efficacy_index) = c("efficacy", "efficacy_up", "efficacy_lw")
+  
+efficacy_index = efficacy_index %>% 
+  mutate(fungicide = c("check", "AZOX+TEBU", "AZOX+TEBU+MANC", "MANC", "PYRA+EPOX", "PYRA+EPOX+MANC", "TEBU","TFLX+PROT", "TFLX+PROT+MANC", "TFLX+TEBU", "TMET+MANC")) %>% 
+  filter(fungicide != "check") %>% 
+  select(fungicide, efficacy, efficacy_lw, efficacy_up)
+efficacy_index
+
+
+#write_csv(efficacy_index, "data/efficacy_index.csv")
+openxlsx::write.xlsx(efficacy_index, here("data","efficacy_index.xlsx"), colNames = TRUE)
+```
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+#Fit the linear contrasts between the fungicides and get the P-values by 'anova' function
+anova(mv_index, L = rbind(
+  c(0, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1),
+  c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1)))
+```
+
+
+## Mod: YEAR
+
+```{r}
+#Fit the model with YEAR as a mod varible
+# wb_sev1 <- wb_severity %>%
+#   filter(mean_sev > 0) %>% 
+#   filter(vi_sev > 0.001)
+
+mv_index_year <- rma.mv(log_index, vi_index,
+   mods = ~active_ingredient*year,
+   random = list(~active_ingredient | factor(study)),
+   struct = "HCS",
+   method = "ML",
+  #control = list(optimizer = "nlm"),
+   data = wb_index  %>% mutate(year= year - 2012))
+mv_index_year
+
+anova(mv_index_year, btt = 13:22) #Colocar o numero de linha da interação
+```
+
+Não houve redução de eficacia a longo dos anos
+
+
+## Mod: region
+
+```{r}
+mv_index_region <- rma.mv(log_index, vi_index,
+  mods = ~ active_ingredient*region,
+  random = list(~active_ingredient | factor(study)),
+  struct = "HCS",
+  method = "ML",
+  #control = list(optimizer = "nlm"),
+  data = wb_index
+)
+
+
+mv_index_region
+
+
+anova(mv_index_region, btt = 13:22) 
+```
+
+### Region effect
+
+Vamos gerar as estimativas de eficácia por região 
+
+```{r}
+reg1 = data.frame(mv_index_region$beta, mv_index_region$ci.lb, mv_index_region$ci.ub) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"),sep = "region" ) %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:20))
+names(reg1) = c("fungicide", "region", "mean", "ci.lb", "ci.ub", "n") 
+
+reg2 = reg1 %>% 
+  filter(n < 11) %>% 
+  mutate(region = rep("North", 10))
+
+reg3 = reg1 %>% 
+  filter(n > 10) %>% 
+  mutate(region = rep("South", 10))
+
+reg4 = rbind(reg2,reg3)  
+
+mean = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1:3) %>% 
+  spread(region, mean) %>% 
+  mutate(mean = (1-exp((North + South)))*100) %>% 
+  select(1,4)
+
+upper = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,4) %>% 
+  spread(region, ci.lb) %>% 
+  mutate(upper = (1-exp((North + South)))*100) %>% 
+  select(1,4)
+
+lower = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,5) %>% 
+  spread(region, ci.ub) %>% 
+  mutate(lower = (1-exp((North + South)))*100) %>% 
+  select(1,4)
+
+reg5 = left_join(mean, lower, by= c("fungicide")) %>% 
+  left_join(upper, by = c("fungicide")) %>% 
+  mutate(region = rep("South", length("fungicide"))) %>% 
+  select("fungicide", "region", "mean", "lower", "upper")
+
+
+North = reg4 %>% 
+  filter(region == "North") %>% 
+  group_by(fungicide, region) %>%
+  summarise(mean = (1-exp(mean))*100,
+            lower = (1-exp(ci.ub))*100,
+            upper = (1-exp(ci.lb))*100) 
+
+reg6 = rbind(North,reg5)
+reg6
+
+#write_csv(reg6, "data/efficacy_index_region.csv")
+openxlsx::write.xlsx(reg6, here("data","efficacy_index_region.xlsx"), colNames = TRUE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

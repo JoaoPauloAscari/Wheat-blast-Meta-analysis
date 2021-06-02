@@ -1,0 +1,356 @@
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+library(metafor)
+library(janitor)
+library(readr)
+library(here)
+```
+
+# WB_index data
+
+```{r}
+
+wb_index <- read_csv("data/dat_index.csv")
+wb_index = wb_index %>% 
+  filter(vi_index>0.0001) %>%
+  group_by(study, year, location, state) %>%
+  mutate(n2 = n()) %>% 
+  filter(n2 != 1)
+summary(wb_index$vi_index)
+
+
+tabyl(wb_index$active_ingredient)
+```
+
+
+
+```{r}
+
+mv_index <- rma.mv(log_index, vi_index,
+  mods = ~active_ingredient,
+  random = list(~active_ingredient | factor(study)),
+  struct = "HCS",
+  method = "ML",
+  data = wb_index
+)
+
+
+mv_index
+```
+
+## Percent control
+
+```{r}
+efficacy_index <- data.frame(cbind(
+  (1 - exp(mv_index$b)) * 100,
+  (1 - exp(mv_index$ci.lb)) * 100,
+  (1 - exp(mv_index$ci.ub)) * 100))
+
+#Organize the data.frame
+efficacy_index = efficacy_index
+  names (efficacy_index) = c("efficacy", "efficacy_up", "efficacy_lw")
+  
+efficacy_index = efficacy_index %>% 
+  mutate(fungicide = c("check", "AZOX+TEBU", "MANC", "PYRA+EPOX", "TEBU","TFLX+PROT", "TFLX+TEBU")) %>% 
+  filter(fungicide != "check") %>% 
+  select(fungicide, efficacy, efficacy_lw, efficacy_up)
+efficacy_index
+
+
+
+openxlsx::write.xlsx(efficacy_index, here("data","efficacy_index.xlsx"), colNames = TRUE)
+```
+
+## Contrasts
+
+We can set linear contrasts between treatments of interest and get the P-value using the `anova` function.
+
+
+```{r}
+
+anova(mv_index, L = rbind(
+  c(0, 1,-1, 0, 0, 0, 0),
+  c(0, 1, 0,-1, 0, 0, 0),
+  c(0, 1, 0, 0,-1, 0, 0),
+  c(0, 1, 0, 0, 0,-1, 0),
+  c(0, 1, 0, 0, 0, 0,-1),
+  c(0, 0, 1,-1, 0, 0, 0),
+  c(0, 0, 1, 0,-1, 0, 0),
+  c(0, 0, 1, 0, 0,-1, 0),
+  c(0, 0, 1, 0, 0, 0,-1),
+  c(0, 0, 0, 1,-1, 0, 0),
+  c(0, 0, 0, 1, 0,-1, 0),
+  c(0, 0, 0, 1, 0, 0,-1),
+  c(0, 0, 0, 0, 1,-1, 0),
+  c(0, 0, 0, 0, 1, 0,-1),
+  c(0, 0, 0, 0, 0, 1,-1)))
+```
+
+
+## Mod: Year
+
+```{r}
+
+mv_index_year <- rma.mv(log_index, vi_index,
+   mods = ~active_ingredient*year,
+   random = list(~active_ingredient | factor(study)),
+   struct = "HCS",
+   method = "ML",
+  #control = list(optimizer = "nlm"),
+   data = wb_index  %>% mutate(year= year - 2012))
+mv_index_year
+
+anova(mv_index_year, btt = 9:14) 
+```
+
+## Mod: region
+
+```{r}
+mv_index_region <- rma.mv(log_index, vi_index,
+  mods = ~ active_ingredient*region,
+  random = list(~active_ingredient | factor(study)),
+  struct = "HCS",
+  method = "ML",
+  #control = list(optimizer = "nlm"),
+  data = wb_index
+)
+
+
+mv_index_region
+
+
+anova(mv_index_region, btt = 9:14) 
+```
+
+
+```{r}
+reg1 = data.frame(mv_index_region$beta, mv_index_region$ci.lb, mv_index_region$ci.ub, mv_index_region$se) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"),sep = "region" ) %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient") %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:12))
+names(reg1) = c("fungicide", "region", "mean_log", "ci.lb_log", "ci.ub_log", "SE_eff","n") 
+
+reg2 = reg1 %>% 
+  filter(n < 7) %>% 
+  mutate(region = rep("Tropical", length(fungicide)))
+
+reg3 = reg1 %>% 
+  filter(n > 6) %>% 
+  mutate(region = rep("Subtropical", length(fungicide)))
+
+reg4 = rbind(reg2,reg3) %>% 
+  select(-"n")
+
+openxlsx::write.xlsx(reg4, here("data","eff_log_region.xlsx"), colNames = TRUE)
+```
+
+
+### Mod effect
+
+```{r}
+
+reg1 = data.frame(mv_index_region$beta, mv_index_region$ci.lb, mv_index_region$ci.ub) %>%
+  rownames_to_column("trat") %>%
+  separate(trat, into = c("lado1", "lado2"), sep = ":") %>%
+  separate(lado2, into = c("lixo","lado3"),sep = "region" ) %>% 
+  select(-lixo) %>%
+  separate(lado1, into = c("lixo","lado1"),sep = "active_ingredient" ) %>%
+  select(-lixo) %>%
+  filter(lado1 != "NA") %>%
+  mutate(n = seq(1:12))
+names(reg1) = c("fungicide", "region", "mean", "ci.lb", "ci.ub", "n") 
+
+reg2 = reg1 %>% 
+  filter(n < 7) %>% 
+  mutate(region = rep("North", 6))
+
+reg3 = reg1 %>% 
+  filter(n > 6) %>% 
+  mutate(region = rep("South", 6))
+
+reg4 = rbind(reg2,reg3)  
+
+mean = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1:3) %>% 
+  spread(region, mean) %>% 
+  mutate(mean = (1-exp((North + South)))*100) %>% 
+  select(1,4)
+
+upper = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,4) %>% 
+  spread(region, ci.lb) %>% 
+  mutate(upper = (1-exp((North + South)))*100) %>% 
+  select(1,4)
+
+lower = reg4%>% 
+  group_by(fungicide) %>% 
+  select(1,2,5) %>% 
+  spread(region, ci.ub) %>% 
+  mutate(lower = (1-exp((North + South)))*100) %>% 
+  select(1,4)
+
+South = left_join(mean, lower, by= c("fungicide")) %>% 
+  left_join(upper, by = c("fungicide")) %>% 
+  mutate(region = rep("South", length("fungicide"))) %>% 
+  select("fungicide", "region", "mean", "lower", "upper")
+
+
+North = reg4 %>% 
+  filter(region == "North") %>% 
+  group_by(fungicide, region) %>%
+  summarise(mean = (1-exp(mean))*100,
+            lower = (1-exp(ci.ub))*100,
+            upper = (1-exp(ci.lb))*100) 
+
+reg6 = rbind(North,South)
+names(reg6) = c("fungicide", "class", "mean_eff", "lower_eff", "upper_eff")
+reg6
+
+
+openxlsx::write.xlsx(reg6, here("data","efficacy_index_region.xlsx"), colNames = TRUE)
+```
+
+## Inconsistency
+
+```{r}
+
+wb_index <- read_csv("data/dat_index.csv") %>% 
+  group_by(study, year, location, state) %>%
+  mutate(n2 = n()) %>% 
+  filter(n2 != 1)
+wb_index
+
+wb_index1 = wb_index %>% 
+  group_by(study) %>% 
+  summarise(active_ingredient1=paste(active_ingredient, collapse=';')) 
+
+wb_index1 %>% 
+  tabyl(active_ingredient1)
+```
+
+
+### Design groups
+
+Eight different designs (here design refers to the set of treatments in the trial) were found in the trials reporting WB index.
+
+```{r}
+design1 = wb_index %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "MANC", "PYRA+EPOX","TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(1, length(active_ingredient))) %>% 
+  filter(n2 == 7) %>% 
+  filter(n3 == 7)
+design1
+
+design2 = wb_index %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "PYRA+EPOX", "TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(2, length(active_ingredient))) %>% 
+  filter(n2 == 6) %>% 
+  filter(n3 == 6)
+design2
+
+design3 = wb_index %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "MANC", "TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(3, length(active_ingredient))) %>% 
+  filter(n2 == 6) %>% 
+  filter(n3 == 6)
+design3
+
+design4 = wb_index %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "AZOX+TEBU", "MANC", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(4, length(active_ingredient))) %>% 
+  filter(n2 == 5) %>% 
+  filter(n3 == 5)
+design4
+
+design5 = wb_index %>% 
+  group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "MANC", "PYRA+EPOX", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(5, length(active_ingredient))) %>% 
+  filter(n2 == 5) %>% 
+  filter(n3 == 5)
+design5
+
+design6 = wb_index %>% 
+group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "MANC", "TEBU", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(6, length(active_ingredient))) %>% 
+  filter(n2 == 5) %>% 
+  filter(n3 == 5)
+design6
+
+design7 = wb_index %>% 
+group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "MANC", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(7, length(active_ingredient))) %>% 
+  filter(n2 == 4) %>% 
+  filter(n3 == 4)
+design7
+
+design8 = wb_index %>% 
+group_by(study) %>% 
+  filter(active_ingredient  %in% c("AACHECK", "TFLX+PROT", "TFLX+TEBU")) %>% 
+  mutate(n3 = n()) %>% 
+  mutate(design = rep(8, length(active_ingredient))) %>% 
+  filter(n2 == 3) %>% 
+  filter(n3 == 3)
+design8
+
+wb_sev_design = rbind(design1, design2, design3, design4, design5, design6, design7, design8)
+
+
+wb_sev_design %>% 
+  group_by(study,design) %>% 
+  summarize() %>% 
+  tabyl(design)
+```
+
+### Test 
+
+We used a factorial-type ANOVA model to determine the significance of the *treatment x design* interaction, evaluated based on the Wald test statistic.
+
+```{r warning=FALSE}
+library(metafor)
+wb_sev_design = wb_sev_design %>% 
+  filter(vi_index>0.0001) 
+  
+
+mv_design <- rma.mv(log_index, vi_index,
+  mods = ~ active_ingredient*design,
+  random = list(~ 1 | study / design / active_ingredient),
+  struct = "HCS",
+  method = "ML",
+  #control = list(optimizer = "nlm"),
+  data = wb_sev_design
+)
+
+
+mv_design
+
+
+anova(mv_design, btt = 9:14)
+```
